@@ -63,31 +63,31 @@ def arabic_to_geez_debug(num):
 
 def __arabic_to_geez(num, digit_map):
     if num >= 20000:
-        quotient = num / 10000
+        quotient = num // 10000
         remainder = num % 10000
 
         return __arabic_to_geez(quotient, digit_map) + digit_map[10000] + __arabic_to_geez(remainder, digit_map)
 
     elif num >= 10000:
-        quotient = num / 10000
+        quotient = num // 10000
         remainder = num % 10000
 
         return digit_map[10000] + __arabic_to_geez(remainder, digit_map)
 
     elif num >= 200:
-        quotient = num / 100
+        quotient = num // 100
         remainder = num % 100
 
         return __arabic_to_geez(quotient, digit_map) + digit_map[100] + __arabic_to_geez(remainder, digit_map)
 
     elif num >= 100:
-        quotient = num / 100
+        quotient = num // 100
         remainder = num % 100
 
         return digit_map[100] + __arabic_to_geez(remainder, digit_map)
 
     else:
-        tens = num / 10 * 10
+        tens = num // 10 * 10
         ones = num % 10
         return digit_map[tens] + digit_map[ones]
 
