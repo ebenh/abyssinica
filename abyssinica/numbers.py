@@ -69,7 +69,6 @@ def __arabic_to_geez(num, digit_map):
         return __arabic_to_geez(quotient, digit_map) + digit_map[10000] + __arabic_to_geez(remainder, digit_map)
 
     elif num >= 10000:
-        quotient = num // 10000
         remainder = num % 10000
 
         return digit_map[10000] + __arabic_to_geez(remainder, digit_map)
@@ -81,7 +80,6 @@ def __arabic_to_geez(num, digit_map):
         return __arabic_to_geez(quotient, digit_map) + digit_map[100] + __arabic_to_geez(remainder, digit_map)
 
     elif num >= 100:
-        quotient = num // 100
         remainder = num % 100
 
         return digit_map[100] + __arabic_to_geez(remainder, digit_map)
