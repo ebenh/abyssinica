@@ -68,9 +68,9 @@ _transliteration = {
 }
 
 
-def romanize(input):
+def romanize(text):
     output = ''
-    for char in input:
+    for char in text:
         try:
             output += _transliteration[char][-1]
         except KeyError:
