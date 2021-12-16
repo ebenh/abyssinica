@@ -19,7 +19,7 @@ Convert between Arabic and Ge'ez numerals.
 ### Romanization
 Transliterate Ge'ez characters.
 
-    >>> from abyssinica.romanize import romanize
+    >>> from abyssinica.romanization import romanize
     >>> print(f"{romanize('ሰላም እንደምን አለህ?').capitalize()}")
     Salām ʼendamn ʼalah?
 
