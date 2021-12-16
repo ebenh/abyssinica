@@ -98,8 +98,10 @@ test_list = [
 class TestNumbers(unittest.TestCase):
     def test_arabic_to_geez(self):
         for item in test_list:
-            self.assertEqual(numerals.arabic_to_geez(item[0]), item[1], str(item[0]) + '!=' + item[1])
+            with self.subTest(item):
+                self.assertEqual(numerals.arabic_to_geez(item[0]), item[1], str(item[0]) + '!=' + item[1])
 
     def test_geez_to_arabic(self):
         for item in test_list:
-            self.assertEqual(numerals.geez_to_arabic(item[1]), item[0], item[1] + '!=' + str(item[0]))
+            with self.subTest(item[::-1]):
+                self.assertEqual(numerals.geez_to_arabic(item[1]), item[0], item[1] + '!=' + str(item[0]))
