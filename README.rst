@@ -4,7 +4,7 @@ Abyssinica
 
 Locale functions for the countries of Eritrea and Ethiopia.
 
-See also `HornMT <https://github.com/gebre/HornMT>`_: a machine-learning corpus for the Horn of Africa region.
+See also `HornMT <https://github.com/gebre/HornMT/>`_: a machine-learning corpus for the Horn of Africa region.
 
 *************
 Functionality
