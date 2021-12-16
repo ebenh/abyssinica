@@ -95,7 +95,7 @@ test_list = [
 ]
 
 
-class TestNumberToolsFunctions(unittest.TestCase):
+class TestNumbers(unittest.TestCase):
     def test_arabic_to_geez(self):
         for item in test_list:
             self.assertEqual(numbers.arabic_to_geez(item[0]), item[1], str(item[0]) + '!=' + item[1])
