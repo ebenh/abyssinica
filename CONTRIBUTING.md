@@ -21,10 +21,12 @@ Before contributing, please take time to review our code of conduct [here](CODE_
 
         $ python3 -m pip install --upgrade twine
 
-5. Upload the package to the PyPI test repository. Username is `__token__`. Password is your token for the test repository (make 
-sure to include the `pypi-` prefix).
+5. Upload the package to the PyPI test repository.
 
         $ python3 -m twine upload --repository testpypi dist/*
+
+   > Note: Username is `__token__` and password is your token for the test repository (make sure to include the `pypi-` 
+   > prefix).
 
 6. Test the package you just uploaded to the PyPI test repository.
         
@@ -34,12 +36,14 @@ sure to include the `pypi-` prefix).
         $ python3 -c "from abyssinica.numerals import arabic_to_geez; print(arabic_to_geez(42));"
         $ deactivate
 
-7. If the above commands execute without errors, you're ready to upload the library to PyPI. Username is `__token__`. 
-Password is your PyPI token (make sure to include the `pypi-` prefix).
+7. If the above commands execute without errors, you're ready to upload the library to PyPI.
 
         $ python3 -m twine upload dist/*
 
-8. Tag the release. The value of `${VERSION}` should be the package's semantic version prefixed with a "v" (e.g. `v1.0.0`).
+   > Note:  Username is `__token__` and password is your PyPI token (make sure to include the `pypi-` prefix).
+
+8. Tag the release. The value of `${VERSION}` should be the package's semantic version prefixed with a "v" (e.g. 
+`v1.0.0`).
     
         $ git tag ${VERSION} && git push --tags
 
