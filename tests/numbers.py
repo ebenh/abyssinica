@@ -102,4 +102,4 @@ class TestNumberToolsFunctions(unittest.TestCase):
 
     def test_geez_to_arabic(self):
         for item in test_list:
-            self.assertRaises(NotImplementedError, numbers.geez_to_arabic, item[1])
+            self.assertEqual(numbers.geez_to_arabic(item[1]), item[0], item[1] + '!=' + str(item[0]))

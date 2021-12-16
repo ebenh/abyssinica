@@ -124,7 +124,7 @@ def geez_to_arabic(num):
 def __geez_to_arabic_ten_thousands(num):
     try:
         idx = num.rindex(__digit_map[10000])
-        return __geez_to_arabic_ten_thousands(num[:idx]) * 10000 + __geez_to_arabic_ten_thousands(num[idx + 1:])
+        return (__geez_to_arabic_ten_thousands(num[:idx]) or 1) * 10000 + __geez_to_arabic_ten_thousands(num[idx + 1:])
     except ValueError:
         return __geez_to_arabic_one_hundreds(num)
 
@@ -132,6 +132,11 @@ def __geez_to_arabic_ten_thousands(num):
 def __geez_to_arabic_one_hundreds(num):
     try:
         idx = num.rindex(__digit_map[100])
-        return __geez_to_arabic_one_hundreds(num[:idx]) * 100 + __geez_to_arabic_one_hundreds(num[idx + 1:])
+        return (__geez_to_arabic_one_hundreds(num[:idx]) or 1) * 100 + __geez_to_arabic_one_hundreds(num[idx + 1:])
     except ValueError:
-        return sum([__reverse_digit_map[digit] for digit in num]) or 1
+        return __geez_to_arabic_tens_and_ones(num)
+
+
+def __geez_to_arabic_tens_and_ones(num):
+    return sum([__reverse_digit_map[digit] for digit in num])
+
