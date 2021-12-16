@@ -301,5 +301,5 @@ def romanize(text):
 
 
 if __name__ == '__main__':
-    v = romanize('ሰላም እንደምን አለህ')
-    print(v)
+    print(f"{romanize('ሰላም እንደምን አለህ?').capitalize()}")
+
