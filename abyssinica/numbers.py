@@ -22,6 +22,30 @@ __digit_map = {
     10000: '፼'
 }
 
+__reverse_digit_map = {
+    '': 0,
+    '፩': 1,
+    '፪': 2,
+    '፫': 3,
+    '፬': 4,
+    '፭': 5,
+    '፮': 6,
+    '፯': 7,
+    '፰': 8,
+    '፱': 9,
+    '፲': 10,
+    '፳': 20,
+    '፴': 30,
+    '፵': 40,
+    '፶': 50,
+    '፷': 60,
+    '፸': 70,
+    '፹': 80,
+    '፺': 90,
+    '፻': 100,
+    '፼': 10000
+}
+
 __digit_map_debug = {
     0: '',
     1: '{1}',
@@ -92,4 +116,22 @@ def __arabic_to_geez(num, digit_map):
 
 
 def geez_to_arabic(num):
-    raise NotImplementedError
+    assert (isinstance(num, str))
+
+    return __geez_to_arabic_ten_thousands(num)
+
+
+def __geez_to_arabic_ten_thousands(num):
+    try:
+        idx = num.rindex(__digit_map[10000])
+        return __geez_to_arabic_ten_thousands(num[:idx]) * 10000 + __geez_to_arabic_ten_thousands(num[idx + 1:])
+    except ValueError:
+        return __geez_to_arabic_one_hundreds(num)
+
+
+def __geez_to_arabic_one_hundreds(num):
+    try:
+        idx = num.rindex(__digit_map[100])
+        return __geez_to_arabic_one_hundreds(num[:idx]) * 100 + __geez_to_arabic_one_hundreds(num[idx + 1:])
+    except ValueError:
+        return sum([__reverse_digit_map[digit] for digit in num]) or 1
