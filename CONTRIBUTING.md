@@ -21,7 +21,7 @@ Before contributing, please take time to review our code of conduct [here](CODE_
 
         $ python3 -m pip install --upgrade twine
 
-5. Upload to the PyPI test repository. Username is `__token__`. Password is your token for the test repository (make 
+5. Upload the package to the PyPI test repository. Username is `__token__`. Password is your token for the test repository (make 
 sure to include the `pypi-` prefix).
 
         $ python3 -m twine upload --repository testpypi dist/*
