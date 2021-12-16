@@ -45,7 +45,7 @@ __reverse_digit_map = {
     '፼': 10000
 }
 
-__digit_map_debug = {
+__digit_map_ascii = {
     0: '',
     1: '{1}',
     2: '{2}',
@@ -77,11 +77,11 @@ def arabic_to_geez(num):
     return __arabic_to_geez(num, __digit_map)
 
 
-def arabic_to_geez_debug(num):
+def arabic_to_geez_ascii(num):
     assert (isinstance(num, int))
     assert (num > 0)
 
-    return __arabic_to_geez(num, __digit_map_debug)
+    return __arabic_to_geez(num, __digit_map_ascii)
 
 
 def __arabic_to_geez(num, digit_map):
