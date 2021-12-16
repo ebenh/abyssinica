@@ -17,7 +17,7 @@ Before contributing, please take time to review our code of conduct [here](CODE_
 
         $ python setup.py sdist
 
-4. Install/upgrade `twine`.
+4. Install and/or upgrade `twine`.
 
         $ python3 -m pip install --upgrade twine
 
