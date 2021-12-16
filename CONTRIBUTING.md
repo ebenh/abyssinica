@@ -36,7 +36,7 @@ Before contributing, please take time to review our code of conduct [here](CODE_
         $ python3 -c "from abyssinica.numerals import arabic_to_geez; print(arabic_to_geez(42));"
         $ deactivate
 
-7. If the above commands execute without errors, you're ready to upload the library to PyPI.
+7. If the above commands execute without any errors, you're ready to upload the library to PyPI.
 
         $ python3 -m twine upload dist/*
 
