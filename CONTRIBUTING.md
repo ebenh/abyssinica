@@ -39,7 +39,7 @@ Password is your PyPI token (make sure to include the `pypi-` prefix).
 
         $ python3 -m twine upload dist/*
 
-8. Tag the release. The value of `${VERSION}` should be of the form `v1.0.0`.
+8. Tag the release. The value of `${VERSION}` should be the package's semantic version prefixed with a "v" (e.g. `v1.0.0`).
     
         $ git tag ${VERSION} && git push --tags
 
