@@ -1,4 +1,4 @@
-__digit_map = {
+_digit_map = {
     0: '',
     1: '፩',
     2: '፪',
@@ -22,7 +22,7 @@ __digit_map = {
     10000: '፼'
 }
 
-__reverse_digit_map = {
+_reverse_digit_map = {
     '፩': 1,
     '፪': 2,
     '፫': 3,
@@ -45,7 +45,7 @@ __reverse_digit_map = {
     '፼': 10000
 }
 
-__digit_map_ascii = {
+_digit_map_ascii = {
     0: '',
     1: '{1}',
     2: '{2}',
@@ -74,38 +74,38 @@ def arabic_to_geez(num):
     assert (isinstance(num, int))
     assert (num > 0)
 
-    return __arabic_to_geez(num, __digit_map)
+    return _arabic_to_geez(num, _digit_map)
 
 
 def arabic_to_geez_ascii(num):
     assert (isinstance(num, int))
     assert (num > 0)
 
-    return __arabic_to_geez(num, __digit_map_ascii)
+    return _arabic_to_geez(num, _digit_map_ascii)
 
 
-def __arabic_to_geez(num, digit_map):
+def _arabic_to_geez(num, digit_map):
     if num >= 20000:
         # num is in the range [20,000, infinity]
         quotient = num // 10000
         remainder = num % 10000
-        return __arabic_to_geez(quotient, digit_map) + digit_map[10000] + __arabic_to_geez(remainder, digit_map)
+        return _arabic_to_geez(quotient, digit_map) + digit_map[10000] + _arabic_to_geez(remainder, digit_map)
 
     elif num >= 10000:
         # num is in the range [10,000, 19,999]
         remainder = num % 10000
-        return digit_map[10000] + __arabic_to_geez(remainder, digit_map)
+        return digit_map[10000] + _arabic_to_geez(remainder, digit_map)
 
     elif num >= 200:
         # num is in the range [200, 9,999]
         quotient = num // 100
         remainder = num % 100
-        return __arabic_to_geez(quotient, digit_map) + digit_map[100] + __arabic_to_geez(remainder, digit_map)
+        return _arabic_to_geez(quotient, digit_map) + digit_map[100] + _arabic_to_geez(remainder, digit_map)
 
     elif num >= 100:
         # num is in the range [100, 199]
         remainder = num % 100
-        return digit_map[100] + __arabic_to_geez(remainder, digit_map)
+        return digit_map[100] + _arabic_to_geez(remainder, digit_map)
 
     else:
         # num is in the range [1, 99]
@@ -117,25 +117,25 @@ def __arabic_to_geez(num, digit_map):
 def geez_to_arabic(num):
     assert (isinstance(num, str))
 
-    return __geez_to_arabic_ten_thousands(num)
+    return _geez_to_arabic_ten_thousands(num)
 
 
-def __geez_to_arabic_ten_thousands(num):
+def _geez_to_arabic_ten_thousands(num):
     try:
-        idx = num.rindex(__digit_map[10000])
-        return (__geez_to_arabic_ten_thousands(num[:idx]) or 1) * 10000 + __geez_to_arabic_ten_thousands(num[idx + 1:])
+        idx = num.rindex(_digit_map[10000])
+        return (_geez_to_arabic_ten_thousands(num[:idx]) or 1) * 10000 + _geez_to_arabic_ten_thousands(num[idx + 1:])
     except ValueError:
-        return __geez_to_arabic_one_hundreds(num)
+        return _geez_to_arabic_one_hundreds(num)
 
 
-def __geez_to_arabic_one_hundreds(num):
+def _geez_to_arabic_one_hundreds(num):
     try:
-        idx = num.rindex(__digit_map[100])
-        return (__geez_to_arabic_one_hundreds(num[:idx]) or 1) * 100 + __geez_to_arabic_one_hundreds(num[idx + 1:])
+        idx = num.rindex(_digit_map[100])
+        return (_geez_to_arabic_one_hundreds(num[:idx]) or 1) * 100 + _geez_to_arabic_one_hundreds(num[idx + 1:])
     except ValueError:
-        return __geez_to_arabic_tens_and_ones(num)
+        return _geez_to_arabic_tens_and_ones(num)
 
 
-def __geez_to_arabic_tens_and_ones(num):
-    return sum([__reverse_digit_map[digit] for digit in num])
+def _geez_to_arabic_tens_and_ones(num):
+    return sum([_reverse_digit_map[digit] for digit in num])
 
