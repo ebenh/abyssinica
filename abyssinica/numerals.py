@@ -23,7 +23,6 @@ __digit_map = {
 }
 
 __reverse_digit_map = {
-    '': 0,
     '፩': 1,
     '፪': 2,
     '፫': 3,
