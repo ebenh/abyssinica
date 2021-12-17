@@ -85,9 +85,9 @@ def arabic_to_geez_ascii(numeral):
 def _arabic_to_geez(numeral, digit_map):
     if numeral >= 20000:
         # numeral is in the range [20,000, infinity]
-        quotient = numeral // 10000
+        num_ten_thousands = numeral // 10000
         remainder = numeral % 10000
-        return _arabic_to_geez(quotient, digit_map) + digit_map[10000] + _arabic_to_geez(remainder, digit_map)
+        return _arabic_to_geez(num_ten_thousands, digit_map) + digit_map[10000] + _arabic_to_geez(remainder, digit_map)
 
     elif numeral >= 10000:
         # numeral is in the range [10,000, 19,999]
@@ -96,9 +96,9 @@ def _arabic_to_geez(numeral, digit_map):
 
     elif numeral >= 200:
         # numeral is in the range [200, 9,999]
-        quotient = numeral // 100
+        num_hundreds = numeral // 100
         remainder = numeral % 100
-        return _arabic_to_geez(quotient, digit_map) + digit_map[100] + _arabic_to_geez(remainder, digit_map)
+        return _arabic_to_geez(num_hundreds, digit_map) + digit_map[100] + _arabic_to_geez(remainder, digit_map)
 
     elif numeral >= 100:
         # numeral is in the range [100, 199]
@@ -107,9 +107,9 @@ def _arabic_to_geez(numeral, digit_map):
 
     elif numeral >= 10:
         # numeral is in the range [10, 99]
-        tens = numeral // 10 * 10
-        ones = numeral % 10
-        return digit_map[tens] + _arabic_to_geez(ones, digit_map)
+        num_tens = numeral // 10
+        remainder = numeral % 10
+        return digit_map[num_tens * 10] + _arabic_to_geez(remainder, digit_map)
 
     elif numeral >= 1:
         # numeral is in the range [1, 9]
