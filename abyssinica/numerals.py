@@ -121,6 +121,7 @@ def _arabic_to_geez(num, digit_map):
 
 
 def geez_to_arabic(num):
+    # todo: check the format of num
     assert (isinstance(num, str))
 
     return _geez_to_arabic_ten_thousands(num)
