@@ -1,5 +1,4 @@
 _digit_map = {
-    0: '',
     1: '፩',
     2: '፪',
     3: '፫',
@@ -46,7 +45,6 @@ _reverse_digit_map = {
 }
 
 _digit_map_ascii = {
-    0: '',
     1: '{1}',
     2: '{2}',
     3: '{3}',
@@ -107,11 +105,19 @@ def _arabic_to_geez(num, digit_map):
         remainder = num % 100
         return digit_map[100] + _arabic_to_geez(remainder, digit_map)
 
-    else:
-        # num is in the range [1, 99]
+    elif num >= 10:
+        # num is in the range [10, 99]
         tens = num // 10 * 10
         ones = num % 10
-        return digit_map[tens] + digit_map[ones]
+        return digit_map[tens] + _arabic_to_geez(ones, digit_map)
+
+    elif num >= 1:
+        # num is in the range [1, 9]
+        return digit_map[num]
+
+    else:
+        # num is zero
+        return ''
 
 
 def geez_to_arabic(num):
