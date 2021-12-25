@@ -1,3 +1,26 @@
+_symbol_map_ascii = {
+    1: '{1}',
+    2: '{2}',
+    3: '{3}',
+    4: '{4}',
+    5: '{5}',
+    6: '{6}',
+    7: '{7}',
+    8: '{8}',
+    9: '{9}',
+    10: '{10}',
+    20: '{20}',
+    30: '{30}',
+    40: '{40}',
+    50: '{50}',
+    60: '{60}',
+    70: '{70}',
+    80: '{80}',
+    90: '{90}',
+    100: '{100}',
+    10000: '{10,000}'
+}
+
 _symbol_map = {
     1: '፩',
     2: '፪',
@@ -44,28 +67,12 @@ _reverse_symbol_map = {
     '፼': 10000
 }
 
-_symbol_map_ascii = {
-    1: '{1}',
-    2: '{2}',
-    3: '{3}',
-    4: '{4}',
-    5: '{5}',
-    6: '{6}',
-    7: '{7}',
-    8: '{8}',
-    9: '{9}',
-    10: '{10}',
-    20: '{20}',
-    30: '{30}',
-    40: '{40}',
-    50: '{50}',
-    60: '{60}',
-    70: '{70}',
-    80: '{80}',
-    90: '{90}',
-    100: '{100}',
-    10000: '{10,000}'
-}
+
+def arabic_to_geez_ascii(numeral):
+    assert (isinstance(numeral, int))
+    assert (numeral > 0)
+
+    return _arabic_to_geez(numeral, _symbol_map_ascii)
 
 
 def arabic_to_geez(numeral):
@@ -73,13 +80,6 @@ def arabic_to_geez(numeral):
     assert (numeral > 0)
 
     return _arabic_to_geez(numeral, _symbol_map)
-
-
-def arabic_to_geez_ascii(numeral):
-    assert (isinstance(numeral, int))
-    assert (numeral > 0)
-
-    return _arabic_to_geez(numeral, _symbol_map_ascii)
 
 
 def _arabic_to_geez(numeral, symbol_map):
