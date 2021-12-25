@@ -84,7 +84,7 @@ def arabic_to_geez_ascii(numeral):
 
 def _arabic_to_geez(numeral, symbol_map):
     if numeral >= 20000:
-        # numeral is in the range [20,000, infinity]
+        # numeral is in the range [20,000, infinity)
         num_ten_thousands = numeral // 10000
         remainder = numeral % 10000
         return _arabic_to_geez(num_ten_thousands, symbol_map) + symbol_map[10000] + _arabic_to_geez(remainder,
