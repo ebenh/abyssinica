@@ -144,4 +144,4 @@ def _geez_to_arabic_hundreds(numeral):
 
 
 def _geez_to_arabic_tens_and_ones(numeral):
-    return sum([_reverse_digit_map[digit] for digit in numeral])
+    return sum([_reverse_digit_map.get(symbol, 0) for symbol in numeral])
