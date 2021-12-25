@@ -132,7 +132,7 @@ def _geez_to_arabic_ten_thousands(numeral):
     if idx == -1:
         return _geez_to_arabic_hundreds(numeral)
     else:
-        return (_geez_to_arabic_ten_thousands(numeral[:idx]) or 1) * 10000 + _geez_to_arabic_hundreds(numeral[idx + 1:])
+        return max(_geez_to_arabic_ten_thousands(numeral[:idx]), 1) * 10000 + _geez_to_arabic_hundreds(numeral[idx + 1:])
 
 
 def _geez_to_arabic_hundreds(numeral):
@@ -140,7 +140,7 @@ def _geez_to_arabic_hundreds(numeral):
     if idx == -1:
         return _geez_to_arabic_tens_and_ones(numeral)
     else:
-        return (_geez_to_arabic_hundreds(numeral[:idx]) or 1) * 100 + _geez_to_arabic_tens_and_ones(numeral[idx + 1:])
+        return max(_geez_to_arabic_hundreds(numeral[:idx]), 1) * 100 + _geez_to_arabic_tens_and_ones(numeral[idx + 1:])
 
 
 def _geez_to_arabic_tens_and_ones(numeral):
