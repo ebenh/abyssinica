@@ -1,4 +1,4 @@
-_digit_map = {
+_symbol_map = {
     1: '፩',
     2: '፪',
     3: '፫',
@@ -21,7 +21,7 @@ _digit_map = {
     10000: '፼'
 }
 
-_reverse_digit_map = {
+_reverse_symbol_map = {
     '፩': 1,
     '፪': 2,
     '፫': 3,
@@ -44,7 +44,7 @@ _reverse_digit_map = {
     '፼': 10000
 }
 
-_digit_map_ascii = {
+_symbol_map_ascii = {
     1: '{1}',
     2: '{2}',
     3: '{3}',
@@ -72,48 +72,49 @@ def arabic_to_geez(numeral):
     assert (isinstance(numeral, int))
     assert (numeral > 0)
 
-    return _arabic_to_geez(numeral, _digit_map)
+    return _arabic_to_geez(numeral, _symbol_map)
 
 
 def arabic_to_geez_ascii(numeral):
     assert (isinstance(numeral, int))
     assert (numeral > 0)
 
-    return _arabic_to_geez(numeral, _digit_map_ascii)
+    return _arabic_to_geez(numeral, _symbol_map_ascii)
 
 
-def _arabic_to_geez(numeral, digit_map):
+def _arabic_to_geez(numeral, symbol_map):
     if numeral >= 20000:
-        # numeral is in the range [20,000, infinity]
+        # numeral is in the range [20,000, infinity)
         num_ten_thousands = numeral // 10000
         remainder = numeral % 10000
-        return _arabic_to_geez(num_ten_thousands, digit_map) + digit_map[10000] + _arabic_to_geez(remainder, digit_map)
+        return _arabic_to_geez(num_ten_thousands, symbol_map) + symbol_map[10000] + _arabic_to_geez(remainder,
+                                                                                                    symbol_map)
 
     elif numeral >= 10000:
         # numeral is in the range [10,000, 19,999]
         remainder = numeral % 10000
-        return digit_map[10000] + _arabic_to_geez(remainder, digit_map)
+        return symbol_map[10000] + _arabic_to_geez(remainder, symbol_map)
 
     elif numeral >= 200:
         # numeral is in the range [200, 9,999]
         num_hundreds = numeral // 100
         remainder = numeral % 100
-        return _arabic_to_geez(num_hundreds, digit_map) + digit_map[100] + _arabic_to_geez(remainder, digit_map)
+        return _arabic_to_geez(num_hundreds, symbol_map) + symbol_map[100] + _arabic_to_geez(remainder, symbol_map)
 
     elif numeral >= 100:
         # numeral is in the range [100, 199]
         remainder = numeral % 100
-        return digit_map[100] + _arabic_to_geez(remainder, digit_map)
+        return symbol_map[100] + _arabic_to_geez(remainder, symbol_map)
 
     elif numeral >= 10:
         # numeral is in the range [10, 99]
         num_tens = numeral // 10
         remainder = numeral % 10
-        return digit_map[num_tens * 10] + _arabic_to_geez(remainder, digit_map)
+        return symbol_map[num_tens * 10] + _arabic_to_geez(remainder, symbol_map)
 
     elif numeral >= 1:
         # numeral is in the range [1, 9]
-        return digit_map[numeral]
+        return symbol_map[numeral]
 
     else:
         # numeral is zero
@@ -128,20 +129,21 @@ def geez_to_arabic(numeral):
 
 
 def _geez_to_arabic_ten_thousands(numeral):
-    idx = numeral.rfind(_digit_map[10000])
+    idx = numeral.rfind(_symbol_map[10000])
     if idx == -1:
         return _geez_to_arabic_hundreds(numeral)
     else:
-        return (_geez_to_arabic_ten_thousands(numeral[:idx]) or 1) * 10000 + _geez_to_arabic_hundreds(numeral[idx + 1:])
+        return max(_geez_to_arabic_ten_thousands(numeral[:idx]), 1) * 10000 + _geez_to_arabic_hundreds(
+            numeral[idx + 1:])
 
 
 def _geez_to_arabic_hundreds(numeral):
-    idx = numeral.rfind(_digit_map[100])
+    idx = numeral.rfind(_symbol_map[100])
     if idx == -1:
         return _geez_to_arabic_tens_and_ones(numeral)
     else:
-        return (_geez_to_arabic_hundreds(numeral[:idx]) or 1) * 100 + _geez_to_arabic_tens_and_ones(numeral[idx + 1:])
+        return max(_geez_to_arabic_hundreds(numeral[:idx]), 1) * 100 + _geez_to_arabic_tens_and_ones(numeral[idx + 1:])
 
 
 def _geez_to_arabic_tens_and_ones(numeral):
-    return sum([_reverse_digit_map[digit] for digit in numeral])
+    return sum([_reverse_symbol_map.get(symbol, 0) for symbol in numeral])
