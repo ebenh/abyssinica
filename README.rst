@@ -2,7 +2,7 @@
 Abyssinica
 ##########
 
-Locale functions for the countries of Eritrea and Ethiopia.
+Locale library for the countries of Ethiopia and Eritrea.
 
 See also `HornMT <https://github.com/gebre/HornMT/>`_: a machine-learning corpus for the Horn of Africa region.
 
