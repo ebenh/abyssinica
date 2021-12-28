@@ -11,6 +11,7 @@ Before contributing, please take time to review our code of conduct [here](CODE_
     $ git clone https://github.com/ebenh/abyssinica/ abyssinica
 
 ### Publishing to PyPI
+
 1. Update `MANIFEST.in` to include any new, non-source files you may have added.
 2. Manually increment the version number in `setup.cfg`.
 3. Build the Python package. 
