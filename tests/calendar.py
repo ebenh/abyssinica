@@ -70,4 +70,25 @@ class TestDates(unittest.TestCase):
         self.assertEqual(calendar.get_month(365.25 * 4 - 0), 13)
         self.assertEqual(calendar.get_month(365.25 * 4 + 1), 1)
 
+    def test_day_of_month(self):
+        # first month
+        self.assertEqual(calendar.get_day_of_month(30 * 0 + 1), 1)
+        self.assertEqual(calendar.get_day_of_month(30 * 0 + 30), 30)
 
+        # second month
+        self.assertEqual(calendar.get_day_of_month(30 * 1 + 1), 1)
+        self.assertEqual(calendar.get_day_of_month(30 * 1 + 30), 30)
+
+        # twelfth month
+        self.assertEqual(calendar.get_day_of_month(30 * 11 + 1), 1)
+        self.assertEqual(calendar.get_day_of_month(30 * 11 + 30), 30)
+
+        # thirteenth month
+        self.assertEqual(calendar.get_day_of_month(30 * 12 + 1), 1)
+        self.assertEqual(calendar.get_day_of_month(30 * 12 + 5), 5)
+        self.assertEqual(calendar.get_day_of_month(30 * 12 + 6), 1)
+
+        # thirteenth month ... leapyear
+        self.assertEqual(calendar.get_day_of_month(365.25 * 4 - 5), 1)
+        self.assertEqual(calendar.get_day_of_month(365.25 * 4 - 0), 6)
+        self.assertEqual(calendar.get_day_of_month(365.25 * 4 + 1), 1)
