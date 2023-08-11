@@ -40,12 +40,22 @@ def get_day_of_year(ordinal_date):
     return day_of_year
 
 
+def get_month(ordinal_date):
+    day_of_year = get_day_of_year(ordinal_date)
+    return math.ceil(day_of_year/30) if day_of_year <= 360 else 13
+
+
+def get_day_of_month(ordinal_date):
+    day_of_year = get_day_of_year(ordinal_date)
+    return my_mod(day_of_year, 30)
+
+
 def my_mod(x, k):
     return ((x - 1) % k) + 1
 
 
 if __name__ == '__main__':
-    print(get_baz(365*4+2))
+    print(get_month(1461-5))
     # day_of_year, month_of_year, day_of_month, year = get_julian_date(1)
     # print(f'day_of_year {day_of_year}')
     # print(f'month_of_year {month_of_year}')
