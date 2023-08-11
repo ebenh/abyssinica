@@ -1,27 +1,6 @@
 import math
 from datetime import datetime
 
-'''
-|----|----|----|----|-|
-0   365  730  1095 1460
-D   M
-00
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
-14
-'''
-
 
 def get_julian_date(ordinal_date):
     # ordinal_date = datetime.now().toordinal()
@@ -47,12 +26,26 @@ def get_julian_date(ordinal_date):
 def get_year(ordinal_date):
     four_year_cycle = int(365.25 * 4)  # 1461
     a, b = divmod(ordinal_date, four_year_cycle)
-    print(a, b)
     return (a * 4) + math.ceil(b / 365)
 
 
+def get_day_of_year(ordinal_date):
+    # get year...
+    four_year_cycle = int(365.25 * 4)  # 1461
+    a, b = divmod(ordinal_date, four_year_cycle)
+    year = (a * 4) + math.ceil(b / 365)
+
+    # get day of year...
+    day_of_year = my_mod(b, 366) if b == 0 else my_mod(b, 365)
+    return day_of_year
+
+
+def my_mod(x, k):
+    return ((x - 1) % k) + 1
+
+
 if __name__ == '__main__':
-    print(get_year(365*4+2))
+    print(get_baz(365*4+2))
     # day_of_year, month_of_year, day_of_month, year = get_julian_date(1)
     # print(f'day_of_year {day_of_year}')
     # print(f'month_of_year {month_of_year}')
