@@ -46,8 +46,10 @@ def gregorian_to_ethiopic(date):
 
 
 if __name__ == '__main__':
-    # ordinal_date = datetime.now().toordinal()
-    # ordinal_date = date(2021, 7, 11)
-    # today = 12 6 2015
-    # print(f'{get_month(ordinal_date)}/{get_day_of_month(ordinal_date)}/{get_year(ordinal_date)}')
-    print(gregorian_to_ethiopic(date(2021, 7, 11)))
+    print(gregorian_to_ethiopic(date(2023, 8, 12)))  # 12/6/2015
+    print(gregorian_to_ethiopic(date(2023, 7, 11)))  # 11/4/2015
+    print(gregorian_to_ethiopic(date(2023, 3, 12)))  # 7/3/2015
+    print(gregorian_to_ethiopic(date(2019, 11, 3)))  # 2/23/2012 !this is off by one day!
+    print(gregorian_to_ethiopic(date(2018, 7, 19)))  # 11/12/2010
+    print(gregorian_to_ethiopic(date(2017, 2, 16)))  # 6/9/2009
+
