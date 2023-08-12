@@ -21,7 +21,7 @@ def get_year(ordinal_date):
 
 def get_day_of_year(ordinal_date):
     _, remainder_days = get_leap_year_cycles(ordinal_date)
-    return my_mod(remainder_days, 366) if remainder_days == 0 else my_mod(remainder_days, 365)
+    return 366 if remainder_days == 0 else my_mod(remainder_days, 365)
 
 
 def get_month(ordinal_date):
