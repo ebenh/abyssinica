@@ -1,9 +1,11 @@
 import math
-from datetime import datetime
+from datetime import datetime, date
 
 _LEAP_YEAR_CYCLE_DAYS = 1461
 """This constant represents a full leap year cycle consisting of four years of 365 days each plus one extra leap day. 
 This figure can be derived from (365 * 4) + 1 or 365.25 * 4"""
+
+_GREGORIAN_OFFSET_DAYS = 2795
 
 
 def get_leap_year_cycles(ordinal_date):
@@ -38,5 +40,14 @@ def my_mod(x, k):
     return ((x - 1) % k) + 1
 
 
+def gregorian_to_ethiopic(date):
+    ordinal_date = date.toordinal() - _GREGORIAN_OFFSET_DAYS
+    return f'{get_month(ordinal_date)}/{get_day_of_month(ordinal_date)}/{get_year(ordinal_date)}'
+
+
 if __name__ == '__main__':
-    print(get_month(1461-5))
+    # ordinal_date = datetime.now().toordinal()
+    # ordinal_date = date(2021, 7, 11)
+    # today = 12 6 2015
+    # print(f'{get_month(ordinal_date)}/{get_day_of_month(ordinal_date)}/{get_year(ordinal_date)}')
+    print(gregorian_to_ethiopic(date(2021, 7, 11)))
