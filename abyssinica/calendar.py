@@ -27,20 +27,22 @@ def get_julian_date(ordinal_date):
     return day_of_year + 1, month_of_year + 1, day_of_month + 1, year
 
 
+def get_leap_year_cycles(ordinal_date):
+    """For a given ordinal date, this method returns the following two-tuple:\n
+    - An integer representing the count of full leap year cycles that have occurred, and
+    - An integer representing the remaining fraction of a leap year cycle expressed in days.
+    """
+    return divmod(ordinal_date, _LEAP_YEAR_CYCLE_DAYS)
+
+
 def get_year(ordinal_date):
-    a, b = divmod(ordinal_date, _LEAP_YEAR_CYCLE_DAYS)
-    return (a * 4) + math.ceil(b / 365)
+    full_leap_year_cycle_count, remainder_days = get_leap_year_cycles(ordinal_date)
+    return (full_leap_year_cycle_count * 4) + math.ceil(remainder_days / 365)
 
 
 def get_day_of_year(ordinal_date):
-    # get year...
-    four_year_cycle = int(365.25 * 4)  # 1461
-    a, b = divmod(ordinal_date, four_year_cycle)
-    year = (a * 4) + math.ceil(b / 365)
-
-    # get day of year...
-    day_of_year = my_mod(b, 366) if b == 0 else my_mod(b, 365)
-    return day_of_year
+    _, remainder_days = get_leap_year_cycles(ordinal_date)
+    return my_mod(remainder_days, 366) if remainder_days == 0 else my_mod(remainder_days, 365)
 
 
 def get_month(ordinal_date):
