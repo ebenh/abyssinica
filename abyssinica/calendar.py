@@ -1,6 +1,10 @@
 import math
 from datetime import datetime
 
+_LEAP_YEAR_CYCLE_DAYS = 1461
+"""This constant represents a full leap year cycle consisting of four years of 365 days each plus one extra leap day. 
+This figure can be derived from (365 * 4) + 1 or 365.25 * 4"""
+
 
 def get_julian_date(ordinal_date):
     # ordinal_date = datetime.now().toordinal()
@@ -24,8 +28,7 @@ def get_julian_date(ordinal_date):
 
 
 def get_year(ordinal_date):
-    four_year_cycle = int(365.25 * 4)  # 1461
-    a, b = divmod(ordinal_date, four_year_cycle)
+    a, b = divmod(ordinal_date, _LEAP_YEAR_CYCLE_DAYS)
     return (a * 4) + math.ceil(b / 365)
 
 
