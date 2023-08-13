@@ -98,8 +98,20 @@ class TestDates(unittest.TestCase):
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2023, 8, 12)), '12/6/2015')
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2023, 7, 11)), '11/4/2015')
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2023, 3, 12)), '7/3/2015')
-        # self.assertEqual(calendar.gregorian_to_ethiopic(date(2019, 11, 3)), '2/23/2012')  # this is off by one day!
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2018, 7, 19)), '11/12/2010')
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2017, 2, 16)), '6/9/2009')
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2002, 5, 22)), '9/14/1994')
         self.assertEqual(calendar.gregorian_to_ethiopic(date(1998, 9, 14)), '1/4/1991')
+
+        # test leap year...
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(2019, 9, 10)), '13/5/2011')
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(2019, 9, 11)),  '13/6/2011')
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(2019, 9, 12)), '1/1/2012')
+
+        # test non-leap year... Not a leap year so new years comes on day earlier
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(2020, 9, 10)), '13/5/2012')
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(2020, 9, 11)), '1/1/2013')
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(2020, 9, 12)), '1/2/2013')
+
+        # test the year following a leap year
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(2019, 11, 3)),'2/23/2012')

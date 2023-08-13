@@ -18,7 +18,7 @@ def _get_leap_year_cycles(ordinal_date):
 
 def _get_year(ordinal_date):
     full_leap_year_cycle_count, remainder_days = _get_leap_year_cycles(ordinal_date)
-    return (full_leap_year_cycle_count * 4) + math.ceil(remainder_days / 365)
+    return (full_leap_year_cycle_count * 4) + math.ceil(remainder_days / 365) - 1
 
 
 def _get_day_of_year(ordinal_date):
@@ -28,7 +28,7 @@ def _get_day_of_year(ordinal_date):
 
 def _get_month(ordinal_date):
     day_of_year = _get_day_of_year(ordinal_date)
-    return math.ceil(day_of_year/30) if day_of_year <= 360 else 13
+    return math.ceil(day_of_year / 30) if day_of_year <= 360 else 13
 
 
 def _get_day_of_month(ordinal_date):
@@ -41,7 +41,7 @@ def _my_mod(x, k):
 
 
 def gregorian_to_ethiopic(date):
-    ordinal_date = date.toordinal() - _GREGORIAN_OFFSET_DAYS
+    ordinal_date = date.toordinal() - _GREGORIAN_OFFSET_DAYS + 365
     return f'{_get_month(ordinal_date)}/{_get_day_of_month(ordinal_date)}/{_get_year(ordinal_date)}'
 
 
@@ -49,9 +49,16 @@ if __name__ == '__main__':
     # print(gregorian_to_ethiopic(date(2023, 8, 12)))  # 12/6/2015
     # print(gregorian_to_ethiopic(date(2023, 7, 11)))  # 11/4/2015
     # print(gregorian_to_ethiopic(date(2023, 3, 12)))  # 7/3/2015
-    print(gregorian_to_ethiopic(date(2019, 11, 3)))  # 2/23/2012 !this is off by one day!
+    # print(gregorian_to_ethiopic(date(2019, 11, 3)))  # 2/23/2012 !this is off by one day!
     # print(gregorian_to_ethiopic(date(2018, 7, 19)))  # 11/12/2010
     # print(gregorian_to_ethiopic(date(2017, 2, 16)))  # 6/9/2009
-    # print(gregorian_to_ethiopic(date(2002, 5, 22)))  # 9/14/1994 !this is off by one day!
-    # print(gregorian_to_ethiopic(date(1998, 9, 14)))  # 1/4/1991 !this is off by one day!
+    # print(gregorian_to_ethiopic(date(2002, 5, 22)))  # 9/14/1994
+    # print(gregorian_to_ethiopic(date(1998, 9, 14)))  # 1/4/1991
 
+    # print(gregorian_to_ethiopic(date(2019, 2, 28)))  # 6/21/2012
+    # print(gregorian_to_ethiopic(date(2020, 2, 28)))  # 6/20/2012 !this is off by one day!
+    # print(gregorian_to_ethiopic(date(2021, 2, 28)))  # 6/21/2013
+
+    print(gregorian_to_ethiopic(date(2019, 9, 10)))  # Got 13/5/2011 Expected 13/5/2011
+    print(gregorian_to_ethiopic(date(2019, 9, 11)))  # Got  1/1/2012 Expected 13/6/2011
+    print(gregorian_to_ethiopic(date(1, 1, 1)))  # Got  1/1/2012 Expected 13/6/2011
