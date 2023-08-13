@@ -101,3 +101,4 @@ class TestDates(unittest.TestCase):
         # self.assertEqual(calendar.gregorian_to_ethiopic(date(2019, 11, 3)), '2/23/2012')  # this is off by one day!
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2018, 7, 19)), '11/12/2010')
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2017, 2, 16)), '6/9/2009')
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(2002, 5, 22)), '9/14/1994')
