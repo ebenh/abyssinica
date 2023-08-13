@@ -62,3 +62,5 @@ if __name__ == '__main__':
     print(gregorian_to_ethiopic(date(2019, 9, 10)))  # Got 13/5/2011 Expected 13/5/2011
     print(gregorian_to_ethiopic(date(2019, 9, 11)))  # Got  1/1/2012 Expected 13/6/2011
     print(gregorian_to_ethiopic(date(1, 1, 1)))  # Got  1/1/2012 Expected 13/6/2011
+
+    print(gregorian_to_ethiopic(date(8, 8, 27)))  # Got  1/1/2012 Expected 13/6/2011

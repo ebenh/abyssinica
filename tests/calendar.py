@@ -4,26 +4,29 @@ from abyssinica import calendar
 
 class TestDates(unittest.TestCase):
     def test_year(self):
+        self.assertEqual(calendar._get_year(365 * 0 - 1), -1)
+        self.assertEqual(calendar._get_year(365 * 0 - 365), -1)
+
         # year 1
-        self.assertEqual(calendar._get_year(365 * 0 + 1), 1)
-        self.assertEqual(calendar._get_year(365 * 0 + 365), 1)
+        self.assertEqual(calendar._get_year(365 * 0 + 1), 0)
+        self.assertEqual(calendar._get_year(365 * 0 + 365), 0)
 
         # year 2
-        self.assertEqual(calendar._get_year(365 * 1 + 1), 2)
-        self.assertEqual(calendar._get_year(365 * 1 + 365), 2)
+        self.assertEqual(calendar._get_year(365 * 1 + 1), 1)
+        self.assertEqual(calendar._get_year(365 * 1 + 365), 1)
 
         # year 3
-        self.assertEqual(calendar._get_year(365 * 2 + 1), 3)
-        self.assertEqual(calendar._get_year(365 * 2 + 365), 3)
+        self.assertEqual(calendar._get_year(365 * 2 + 1), 2)
+        self.assertEqual(calendar._get_year(365 * 2 + 365), 2)
 
         # year 4 ... this is a leap year
-        self.assertEqual(calendar._get_year(365 * 3 + 1), 4)
-        self.assertEqual(calendar._get_year(365 * 3 + 365), 4)
-        self.assertEqual(calendar._get_year(365 * 3 + 366), 4)
+        self.assertEqual(calendar._get_year(365 * 3 + 1), 3)
+        self.assertEqual(calendar._get_year(365 * 3 + 365), 3)
+        self.assertEqual(calendar._get_year(365 * 3 + 366), 3)
 
         # year 5
-        self.assertEqual(calendar._get_year(365.25 * 4 + 1), 5)
-        self.assertEqual(calendar._get_year(365.25 * 4 + 365), 5)
+        self.assertEqual(calendar._get_year(365.25 * 4 + 1), 4)
+        self.assertEqual(calendar._get_year(365.25 * 4 + 365), 4)
 
     def test_day_of_year(self):
         # year 1
@@ -115,3 +118,6 @@ class TestDates(unittest.TestCase):
 
         # test the year following a leap year
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2019, 11, 3)),'2/23/2012')
+
+        # test 1/1/1
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(8, 8, 27)), '1/1/1')
