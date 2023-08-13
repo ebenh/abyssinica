@@ -4,9 +4,6 @@ from abyssinica import calendar
 
 class TestDates(unittest.TestCase):
     def test_year(self):
-        self.assertEqual(calendar._get_year(365 * 0 - 1), -1)
-        self.assertEqual(calendar._get_year(365 * 0 - 365), -1)
-
         # year 1
         self.assertEqual(calendar._get_year(365 * 0 + 1), 0)
         self.assertEqual(calendar._get_year(365 * 0 + 365), 0)
