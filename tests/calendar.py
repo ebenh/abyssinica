@@ -102,3 +102,4 @@ class TestDates(unittest.TestCase):
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2018, 7, 19)), '11/12/2010')
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2017, 2, 16)), '6/9/2009')
         self.assertEqual(calendar.gregorian_to_ethiopic(date(2002, 5, 22)), '9/14/1994')
+        self.assertEqual(calendar.gregorian_to_ethiopic(date(1998, 9, 14)), '1/4/1991')
