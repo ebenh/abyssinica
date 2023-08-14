@@ -21,6 +21,11 @@ class Date:
         self._day = day
 
     @staticmethod
+    def is_leap_year(year: int) -> bool:
+        assert year >= 1, 'Dates before 1 AD of the Ethiopic calendar are not supported'
+        return (year + 1) % 4 == 0
+
+    @staticmethod
     def _get_leap_year_cycles(ethiopic_day_number: int):
         """
         :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
