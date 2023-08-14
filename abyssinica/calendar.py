@@ -21,7 +21,7 @@ def _get_leap_year_cycles(ethiopic_day_number):
     return divmod(ethiopic_day_number, _LEAP_YEAR_CYCLE_DAYS)
 
 
-def _get_year(ethiopic_day_number):
+def _get_year(ethiopic_day_number: int) -> int:
     """
     :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of the
                                 Ethiopic calendar.
@@ -32,7 +32,7 @@ def _get_year(ethiopic_day_number):
     return (full_leap_year_cycle_count * 4) + math.ceil(remainder_days / 365) - 1
 
 
-def _get_day_of_year(ethiopic_day_number):
+def _get_day_of_year(ethiopic_day_number: int) -> int:
     """
     :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of
                                 the Ethiopic calendar.
@@ -44,7 +44,7 @@ def _get_day_of_year(ethiopic_day_number):
     return 366 if remainder_days == 0 else _my_mod(remainder_days, 365)
 
 
-def _get_month(ethiopic_day_number):
+def _get_month(ethiopic_day_number: int) -> int:
     """
     :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of
                                 the Ethiopic calendar.
@@ -55,7 +55,7 @@ def _get_month(ethiopic_day_number):
     return math.ceil(day_of_year / 30) if day_of_year <= 360 else 13
 
 
-def _get_day_of_month(ethiopic_day_number):
+def _get_day_of_month(ethiopic_day_number: int) -> int:
     """
     :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of
                                 the Ethiopic calendar.
@@ -70,7 +70,7 @@ def _my_mod(x, k):
     return ((x - 1) % k) + 1
 
 
-def gregorian_to_ethiopic(gregorian_date):
+def gregorian_to_ethiopic(gregorian_date: date) -> str:
     """
     :param gregorian_date:
     :return:
