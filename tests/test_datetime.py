@@ -1,7 +1,7 @@
 import unittest
 
 
-class TestDates(unittest.TestCase):
+class TestDate(unittest.TestCase):
     def test_year(self):
         from abyssinica.datetime import Date
         # year 1
