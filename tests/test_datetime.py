@@ -3,11 +3,11 @@ import unittest
 
 class TestDate(unittest.TestCase):
     @staticmethod
-    def _get_n_years(n):
+    def _get_n_years(n: int) -> int:
         return 365 * n
 
     @staticmethod
-    def _get_n_months(n):
+    def _get_n_months(n: int) -> int:
         return 30 * n
 
     def test_get_year(self):
@@ -92,28 +92,29 @@ class TestDate(unittest.TestCase):
 
     def test_from_gregorian_to_ethoipic(self):
         from abyssinica.datetime import Date as EthiopicDate
-        from datetime import date as GregorianDate
+        from datetime import date
 
-        self.assertEqual(EthiopicDate(2015, 12, 6), EthiopicDate.from_gregorian(GregorianDate(2023, 8, 12)))
-        self.assertEqual(EthiopicDate(2015, 11, 4), EthiopicDate.from_gregorian(GregorianDate(2023, 7, 11)))
-        self.assertEqual(EthiopicDate(2015, 7, 3), EthiopicDate.from_gregorian(GregorianDate(2023, 3, 12)))
-        self.assertEqual(EthiopicDate(2010, 11, 12), EthiopicDate.from_gregorian(GregorianDate(2018, 7, 19)))
-        self.assertEqual(EthiopicDate(2009, 6, 9), EthiopicDate.from_gregorian(GregorianDate(2017, 2, 16)))
-        self.assertEqual(EthiopicDate(1994, 9, 14), EthiopicDate.from_gregorian(GregorianDate(2002, 5, 22)))
-        self.assertEqual(EthiopicDate(1991, 1, 4), EthiopicDate.from_gregorian(GregorianDate(1998, 9, 14)))
+        # Test random dates
+        self.assertEqual(EthiopicDate(2015, 12, 6), EthiopicDate.from_gregorian(date(2023, 8, 12)))
+        self.assertEqual(EthiopicDate(2015, 11, 4), EthiopicDate.from_gregorian(date(2023, 7, 11)))
+        self.assertEqual(EthiopicDate(2015, 7, 3), EthiopicDate.from_gregorian(date(2023, 3, 12)))
+        self.assertEqual(EthiopicDate(2010, 11, 12), EthiopicDate.from_gregorian(date(2018, 7, 19)))
+        self.assertEqual(EthiopicDate(2009, 6, 9), EthiopicDate.from_gregorian(date(2017, 2, 16)))
+        self.assertEqual(EthiopicDate(1994, 9, 14), EthiopicDate.from_gregorian(date(2002, 5, 22)))
+        self.assertEqual(EthiopicDate(1991, 1, 4), EthiopicDate.from_gregorian(date(1998, 9, 14)))
 
-        # test leap year...
-        self.assertEqual(EthiopicDate(2011, 13, 5), EthiopicDate.from_gregorian(GregorianDate(2019, 9, 10)))
-        self.assertEqual(EthiopicDate(2011, 13, 6), EthiopicDate.from_gregorian(GregorianDate(2019, 9, 11)))
-        self.assertEqual(EthiopicDate(2012, 1, 1), EthiopicDate.from_gregorian(GregorianDate(2019, 9, 12)))
+        # Test new years (leap year)
+        self.assertEqual(EthiopicDate(2011, 13, 5), EthiopicDate.from_gregorian(date(2019, 9, 10)))
+        self.assertEqual(EthiopicDate(2011, 13, 6), EthiopicDate.from_gregorian(date(2019, 9, 11)))
+        self.assertEqual(EthiopicDate(2012, 1, 1), EthiopicDate.from_gregorian(date(2019, 9, 12)))
 
-        # test non-leap year... Not a leap year so new years comes on day earlier
-        self.assertEqual(EthiopicDate(2012, 13, 5), EthiopicDate.from_gregorian(GregorianDate(2020, 9, 10)))
-        self.assertEqual(EthiopicDate(2013, 1, 1), EthiopicDate.from_gregorian(GregorianDate(2020, 9, 11)))
-        self.assertEqual(EthiopicDate(2013, 1, 2), EthiopicDate.from_gregorian(GregorianDate(2020, 9, 12)))
+        # Test new years (non leap years)
+        self.assertEqual(EthiopicDate(2012, 13, 5), EthiopicDate.from_gregorian(date(2020, 9, 10)))
+        self.assertEqual(EthiopicDate(2013, 1, 1), EthiopicDate.from_gregorian(date(2020, 9, 11)))
+        self.assertEqual(EthiopicDate(2013, 1, 2), EthiopicDate.from_gregorian(date(2020, 9, 12)))
 
-        # test the year following a leap year
-        self.assertEqual(EthiopicDate(2012, 2, 23), EthiopicDate.from_gregorian(GregorianDate(2019, 11, 3)))
+        # Test a random date in the year following a leap year
+        self.assertEqual(EthiopicDate(2012, 2, 23), EthiopicDate.from_gregorian(date(2019, 11, 3)))
 
-        # test 1/1/1
-        self.assertEqual(EthiopicDate(1, 1, 1), EthiopicDate.from_gregorian(GregorianDate(8, 8, 27)))
+        # Test 1/1/1
+        self.assertEqual(EthiopicDate(1, 1, 1), EthiopicDate.from_gregorian(date(8, 8, 27)))
