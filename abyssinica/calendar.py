@@ -23,10 +23,11 @@ class Date:
     @staticmethod
     def _get_leap_year_cycles(ethiopic_day_number: int):
         """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of
-                                    the Ethiopic calendar.
+        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
+                                    of the Ethiopic calendar.
         :return: A two-tuple consisting of (1) An integer representing the count of full leap year cycles that have
-                 occurred, and (2) An integer representing the remaining fraction of a leap year cycle expressed in days.
+                 occurred, and (2) An integer representing the remaining fraction of a leap year cycle expressed in
+                 days.
         """
         assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
         return divmod(ethiopic_day_number, Date._LEAP_YEAR_CYCLE_DAYS)
@@ -34,8 +35,8 @@ class Date:
     @staticmethod
     def _get_year(ethiopic_day_number: int) -> int:
         """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of
-                                    the Ethiopic calendar.
+        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
+                                    of the Ethiopic calendar.
         :return: An integer representing the year in the range [1, inf)
         """
         assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
@@ -45,8 +46,8 @@ class Date:
     @staticmethod
     def _get_day_of_year(ethiopic_day_number: int) -> int:
         """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of
-                                    the Ethiopic calendar.
+        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
+                                    of the Ethiopic calendar.
         :return: The cumulative count of days since the start of the year. This value falls in the range [1, 365] for
                  non-leap years, and [1, 366] for leap years.
         """
@@ -57,8 +58,8 @@ class Date:
     @staticmethod
     def _get_month(ethiopic_day_number: int) -> int:
         """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of
-                                    the Ethiopic calendar.
+        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
+                                    of the Ethiopic calendar.
         :return: An integer representing the month of the year in the range [1, 13].
         """
         assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
@@ -68,8 +69,8 @@ class Date:
     @staticmethod
     def _get_day_of_month(ethiopic_day_number: int) -> int:
         """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC of
-                                    the Ethiopic calendar.
+        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
+                                    of the Ethiopic calendar.
         :return: An integer representing the day of the month in the range [1, 30].
         """
         assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
@@ -89,7 +90,7 @@ class Date:
     @staticmethod
     def from_gregorian(gregorian_date: date):
         """
-        Convert a date from Gregorian to Ethiopic.
+        Create an Ethiopic `Date` object from a Gregorian `date` object
         :param gregorian_date: The Gregorian date.
         :return: The Ethiopic date.
         """
