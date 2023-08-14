@@ -47,11 +47,6 @@ class Date:
 
     @staticmethod
     def from_gregorian(gregorian_date: date) -> 'Date':
-        """
-        Create an Ethiopic `Date` object from a Gregorian `date` object
-        :param gregorian_date: The Gregorian date.
-        :return: The Ethiopic date.
-        """
         assert gregorian_date >= date(8, 8, 27), 'Dates before 1 AD of the Ethiopic calendar are not supported'
 
         ethiopic_day_number = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
