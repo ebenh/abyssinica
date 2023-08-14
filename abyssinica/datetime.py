@@ -16,6 +16,16 @@ class Date:
     """
 
     def __init__(self, year: int, month: int, day: int):
+        assert year >= 1, 'Dates before 1 AD of the Ethiopic calendar are not supported'
+        assert 1 <= month <= 13
+
+        if month <= 12:
+            assert 1 <= day <= 30
+        elif Date.is_leap_year(year):
+            assert 1 <= day <= 6
+        else:
+            assert 1 <= day <= 5
+
         self._year = year
         self._month = month
         self._day = day
