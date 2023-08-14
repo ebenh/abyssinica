@@ -11,8 +11,8 @@ class Date:
 
     _GREGORIAN_OFFSET_DAYS = 2430
     """
-    The difference in days between first day of the first month of the year 1 AD of the Gregorian calendar, and the first 
-    day of the first month of the year 1 BC of the Ethiopic calendar.
+    The difference in days between first day of the first month of the year 1 AD of the Gregorian calendar, and the 
+    first day of the first month of the year 1 BC of the Ethiopic calendar.
     """
 
     def __init__(self, year: int, month: int, day: int):
@@ -33,48 +33,26 @@ class Date:
         return divmod(ethiopic_day_number, Date._LEAP_YEAR_CYCLE_DAYS)
 
     @staticmethod
-    def _get_year(ethiopic_day_number: int) -> int:
-        """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
-                                    of the Ethiopic calendar.
-        :return: An integer representing the year in the range [1, inf)
-        """
-        assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
-        full_leap_year_cycle_count, remainder_days = Date._get_leap_year_cycles(ethiopic_day_number)
+    def _get_year(full_leap_year_cycle_count: int, remainder_days: int) -> int:
+        assert full_leap_year_cycle_count >= 0
+        assert 0 <= remainder_days < Date._LEAP_YEAR_CYCLE_DAYS
+        if full_leap_year_cycle_count == 0:
+            assert remainder_days > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
         return (full_leap_year_cycle_count * 4) + math.ceil(remainder_days / 365) - 1
 
     @staticmethod
-    def _get_day_of_year(ethiopic_day_number: int) -> int:
-        """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
-                                    of the Ethiopic calendar.
-        :return: The cumulative count of days since the start of the year. This value falls in the range [1, 365] for
-                 non-leap years, and [1, 366] for leap years.
-        """
-        assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
-        _, remainder_days = Date._get_leap_year_cycles(ethiopic_day_number)
+    def _get_day_of_year(remainder_days: int) -> int:
+        assert 0 <= remainder_days < Date._LEAP_YEAR_CYCLE_DAYS
         return 366 if remainder_days == 0 else Date._circular_index(remainder_days, 365)
 
     @staticmethod
-    def _get_month(ethiopic_day_number: int) -> int:
-        """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
-                                    of the Ethiopic calendar.
-        :return: An integer representing the month of the year in the range [1, 13].
-        """
-        assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
-        day_of_year = Date._get_day_of_year(ethiopic_day_number)
+    def _get_month(day_of_year: int) -> int:
+        assert 1 <= day_of_year <= 366
         return math.ceil(day_of_year / 30) if day_of_year <= 360 else 13
 
     @staticmethod
-    def _get_day_of_month(ethiopic_day_number: int) -> int:
-        """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
-                                    of the Ethiopic calendar.
-        :return: An integer representing the day of the month in the range [1, 30].
-        """
-        assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
-        day_of_year = Date._get_day_of_year(ethiopic_day_number)
+    def _get_day_of_month(day_of_year: int) -> int:
+        assert 1 <= day_of_year <= 366
         return Date._circular_index(day_of_year, 30)
 
     @staticmethod
@@ -95,10 +73,18 @@ class Date:
         :return: The Ethiopic date.
         """
         assert gregorian_date >= date(8, 8, 27), 'Dates before 1 AD of the Ethiopic calendar are not supported'
+
         ethiopic_day_number = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
-        year = Date._get_year(ethiopic_day_number)
-        month = Date._get_month(ethiopic_day_number)
-        day = Date._get_day_of_month(ethiopic_day_number)
+
+        full_leap_year_cycle_count, remainder_days = Date._get_leap_year_cycles(ethiopic_day_number)
+
+        year = Date._get_year(full_leap_year_cycle_count, remainder_days)
+
+        day_of_year = Date._get_day_of_year(remainder_days)
+
+        month = Date._get_month(day_of_year)
+        day = Date._get_day_of_month(day_of_year)
+
         return Date(year, month, day)
 
     def __str__(self):

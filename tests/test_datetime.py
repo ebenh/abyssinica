@@ -2,102 +2,93 @@ import unittest
 
 
 class TestDate(unittest.TestCase):
+    @staticmethod
+    def _get_n_years(n):
+        return 365 * n
+
+    @staticmethod
+    def _get_n_months(n):
+        return 30 * n
+
     def test_year(self):
         from abyssinica.datetime import Date
-        # year 1
-        self.assertEqual(Date._get_year(365 * 0 + 1 + 365), 1)
-        self.assertEqual(Date._get_year(365 * 0 + 365 + 365), 1)
 
-        # year 2
-        self.assertEqual(Date._get_year(365 * 1 + 1 + 365), 2)
-        self.assertEqual(Date._get_year(365 * 1 + 365 + 365), 2)
+        # Test 1 AD
+        self.assertEqual(1, Date._get_year(0, TestDate._get_n_years(1) + 1))
+        self.assertEqual(1, Date._get_year(0, TestDate._get_n_years(1) + 365))
 
-        # year 3
-        # self.assertEqual(calendar._get_year(365 * 2 + 1), 2)
-        # self.assertEqual(calendar._get_year(365 * 2 + 365), 2)
+        # Test 2 AD
+        self.assertEqual(2, Date._get_year(0, TestDate._get_n_years(2) + 1))
+        self.assertEqual(2, Date._get_year(0, TestDate._get_n_years(2) + 365))
 
-        # year 4 ... this is a leap year
-        self.assertEqual(Date._get_year(365 * 2 + 1 + 365), 3)
-        self.assertEqual(Date._get_year(365 * 2 + 365 + 365), 3)
-        self.assertEqual(Date._get_year(365 * 2 + 366 + 365), 3)
+        # Test 3 AD (leap year)
+        self.assertEqual(3, Date._get_year(0, TestDate._get_n_years(3) + 1))
+        self.assertEqual(3, Date._get_year(0, TestDate._get_n_years(3) + 365))
+        self.assertEqual(3, Date._get_year(1, TestDate._get_n_years(0)))
 
-        # year 5
-        self.assertEqual(Date._get_year(365.25 * 4 + 1 + 365), 5)
-        self.assertEqual(Date._get_year(365.25 * 4 + 365 + 365), 5)
+        # Test 4 AD
+        self.assertEqual(4, Date._get_year(1, TestDate._get_n_years(0) + 1))
+        self.assertEqual(4, Date._get_year(1, TestDate._get_n_years(0) + 365))
 
     def test_day_of_year(self):
         from abyssinica.datetime import Date
 
-        # year 1
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 0 + 1), 1)
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 0 + 365), 365)
+        # Year 1
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(0) + 1), 1)
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(0) + 365), 365)
 
-        # year 2
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 1 + 1), 1)
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 1 + 365), 365)
+        # Year 2
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(1) + 1), 1)
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(1) + 365), 365)
 
-        # year 3
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 2 + 1), 1)
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 2 + 365), 365)
+        # Year 3 (leap year)
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(2) + 1), 1)
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(2) + 365), 365)
 
-        # year 4 ... this is a leap year
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 3 + 1 + 1), 1)
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 3 + 1 + 365), 365)
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 3 + 1 + 366), 1)
-
-        # year 5
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 3 + 1), 366)
-        self.assertEqual(Date._get_day_of_year(365 + 365 * 3 + 1 + 365), 365)
+        # Year 4
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(3) + 1), 1)
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(3) + 365), 365)
+        self.assertEqual(Date._get_day_of_year(TestDate._get_n_years(0)), 366)
 
     def test_month(self):
         from abyssinica.datetime import Date
 
-        # first month
-        self.assertEqual(Date._get_month(365 + 30 * 0 + 1), 1)
-        self.assertEqual(Date._get_month(365 + 30 * 0 + 30), 1)
+        # First month
+        self.assertEqual(Date._get_month(TestDate._get_n_months(0) + 1), 1)
+        self.assertEqual(Date._get_month(TestDate._get_n_months(0) + 30), 1)
 
-        # second month
-        self.assertEqual(Date._get_month(365 + 30 * 1 + 1), 2)
-        self.assertEqual(Date._get_month(365 + 30 * 1 + 30), 2)
+        # Second month
+        self.assertEqual(Date._get_month(TestDate._get_n_months(1) + 1), 2)
+        self.assertEqual(Date._get_month(TestDate._get_n_months(1) + 30), 2)
 
-        # twelfth month
-        self.assertEqual(Date._get_month(365 + 30 * 11 + 1), 12)
-        self.assertEqual(Date._get_month(365 + 30 * 11 + 30), 12)
+        # Twelfth month
+        self.assertEqual(Date._get_month(TestDate._get_n_months(11) + 1), 12)
+        self.assertEqual(Date._get_month(TestDate._get_n_months(11) + 30), 12)
 
-        # thirteenth month
-        self.assertEqual(Date._get_month(365 + 30 * 12 + 1), 13)
-        self.assertEqual(Date._get_month(365 + 30 * 12 + 5), 13)
-        self.assertEqual(Date._get_month(365 + 30 * 12 + 6), 1)
-
-        # thirteenth month ... leapyear
-        self.assertEqual(Date._get_month(365 + 365 * 3 + 1 - 5), 13)
-        self.assertEqual(Date._get_month(365 + 365 * 3 + 1 - 0), 13)
-        self.assertEqual(Date._get_month(365 + 365 * 3 + 1 + 1), 1)
+        # Thirteenth month
+        self.assertEqual(Date._get_month(TestDate._get_n_months(12) + 1), 13)
+        self.assertEqual(Date._get_month(TestDate._get_n_months(12) + 5), 13)
+        self.assertEqual(Date._get_month(TestDate._get_n_months(12) + 6), 13)
 
     def test_day_of_month(self):
         from abyssinica.datetime import Date
 
-        # first month
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 0 + 1), 1)
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 0 + 30), 30)
+        # First month
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(0) + 1), 1)
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(0) + 30), 30)
 
-        # second month
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 1 + 1), 1)
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 1 + 30), 30)
+        # Second month
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(1) + 1), 1)
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(1) + 30), 30)
 
-        # twelfth month
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 11 + 1), 1)
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 11 + 30), 30)
+        # Twelfth month
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(11) + 1), 1)
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(11) + 30), 30)
 
-        # thirteenth month
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 12 + 1), 1)
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 12 + 5), 5)
-        self.assertEqual(Date._get_day_of_month(365 + 30 * 12 + 6), 1)
-
-        # thirteenth month ... leapyear
-        self.assertEqual(Date._get_day_of_month(365 + 365 * 3 + 1 - 5), 1)
-        self.assertEqual(Date._get_day_of_month(365 + 365 * 3 + 1 - 0), 6)
-        self.assertEqual(Date._get_day_of_month(365 + 365 * 3 + 1 + 1), 1)
+        # Thirteenth month
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(12) + 1), 1)
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(12) + 5), 5)
+        self.assertEqual(Date._get_day_of_month(TestDate._get_n_months(12) + 6), 6)
 
     def test_gregorian_to_ethoipic(self):
         from abyssinica.datetime import Date as EthiopicDate
