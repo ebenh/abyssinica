@@ -30,6 +30,10 @@ class TestDate(unittest.TestCase):
         self.assertEqual(4, Date._get_year(1, TestDate._get_n_years(0) + 1))
         self.assertEqual(4, Date._get_year(1, TestDate._get_n_years(0) + 365))
 
+        # Test 5 AD
+        self.assertEqual(5, Date._get_year(1, TestDate._get_n_years(1) + 1))
+        self.assertEqual(5, Date._get_year(1, TestDate._get_n_years(1) + 365))
+
     def test_get_day_of_year(self):
         from abyssinica.datetime import Date
 
