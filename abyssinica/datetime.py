@@ -26,9 +26,9 @@ class Date:
         else:
             assert 1 <= day <= 5
 
-        self._year = year
-        self._month = month
-        self._day = day
+        self.year = year
+        self.month = month
+        self.day = day
 
     @staticmethod
     def is_leap_year(year: int) -> bool:
@@ -36,10 +36,10 @@ class Date:
         return (year + 1) % 4 == 0
 
     def toordinal(self) -> int:
-        full_leap_year_cycle_count, remainder_years = divmod(self._year, 4)
+        full_leap_year_cycle_count, remainder_years = divmod(self.year, 4)
         a = (full_leap_year_cycle_count * self._LEAP_YEAR_CYCLE_DAYS) + (remainder_years * 365)
-        b = (self._month - 1) * 30
-        c = self._day
+        b = (self.month - 1) * 30
+        c = self.day
         return a + b + c
 
     def to_gregorian(self) -> date:
@@ -114,10 +114,10 @@ class Date:
         return ((idx - 1) % k) + 1
 
     def __str__(self):
-        return f'{self._month}/{self._day}/{self._year}'
+        return f'{self.month}/{self.day}/{self.year}'
 
     def __eq__(self, other: 'Date'):
-        return self._month == other._month and self._day == other._day and self._year == other._year
+        return self.month == other.month and self.day == other.day and self.year == other.year
 
 
 if __name__ == '__main__':
