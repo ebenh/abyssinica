@@ -35,6 +35,39 @@ class Date:
         assert year >= 1, 'Dates before 1 AD of the Ethiopic calendar are not supported'
         return (year + 1) % 4 == 0
 
+    def toordinal(self) -> int:
+        full_leap_year_cycle_count, remainder_years = divmod(self._year, 4)
+        a = (full_leap_year_cycle_count * self._LEAP_YEAR_CYCLE_DAYS) + (remainder_years * 365)
+        b = (self._month - 1) * 30
+        c = self._day
+        return a + b + c
+
+    def to_gregorian(self) -> date:
+        gregorian_day_number = self.toordinal() + Date._GREGORIAN_OFFSET_DAYS
+        return date.fromordinal(gregorian_day_number)
+
+    @staticmethod
+    def from_gregorian(gregorian_date: date) -> 'Date':
+        """
+        Create an Ethiopic `Date` object from a Gregorian `date` object
+        :param gregorian_date: The Gregorian date.
+        :return: The Ethiopic date.
+        """
+        assert gregorian_date >= date(8, 8, 27), 'Dates before 1 AD of the Ethiopic calendar are not supported'
+
+        ethiopic_day_number = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
+
+        full_leap_year_cycle_count, remainder_days = Date._get_leap_year_cycles(ethiopic_day_number)
+
+        year = Date._get_year(full_leap_year_cycle_count, remainder_days)
+
+        day_of_year = Date._get_day_of_year(remainder_days)
+
+        month = Date._get_month(day_of_year)
+        day = Date._get_day_of_month(day_of_year)
+
+        return Date(year, month, day)
+
     @staticmethod
     def _get_leap_year_cycles(ethiopic_day_number: int):
         """
@@ -79,28 +112,6 @@ class Date:
         :return: The index `idx` wrapped around within the range [1, k]
         """
         return ((idx - 1) % k) + 1
-
-    @staticmethod
-    def from_gregorian(gregorian_date: date):
-        """
-        Create an Ethiopic `Date` object from a Gregorian `date` object
-        :param gregorian_date: The Gregorian date.
-        :return: The Ethiopic date.
-        """
-        assert gregorian_date >= date(8, 8, 27), 'Dates before 1 AD of the Ethiopic calendar are not supported'
-
-        ethiopic_day_number = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
-
-        full_leap_year_cycle_count, remainder_days = Date._get_leap_year_cycles(ethiopic_day_number)
-
-        year = Date._get_year(full_leap_year_cycle_count, remainder_days)
-
-        day_of_year = Date._get_day_of_year(remainder_days)
-
-        month = Date._get_month(day_of_year)
-        day = Date._get_day_of_month(day_of_year)
-
-        return Date(year, month, day)
 
     def __str__(self):
         return f'{self._month}/{self._day}/{self._year}'

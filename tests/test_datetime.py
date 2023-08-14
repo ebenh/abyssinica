@@ -94,7 +94,7 @@ class TestDate(unittest.TestCase):
         self.assertEqual(5, Date._get_day_of_month(TestDate._get_n_months(12) + 5))
         self.assertEqual(6, Date._get_day_of_month(TestDate._get_n_months(12) + 6))
 
-    def test_from_gregorian_to_ethoipic(self):
+    def test_from_gregorian(self):
         from abyssinica.datetime import Date as EthiopicDate
         from datetime import date
 
@@ -122,3 +122,32 @@ class TestDate(unittest.TestCase):
 
         # Test 1/1/1
         self.assertEqual(EthiopicDate(1, 1, 1), EthiopicDate.from_gregorian(date(8, 8, 27)))
+
+    def test_to_gregorian(self):
+            from abyssinica.datetime import Date as EthiopicDate
+            from datetime import date
+
+            # Test random dates
+            self.assertEqual(date(2023, 8, 12), EthiopicDate(2015, 12, 6).to_gregorian())
+            self.assertEqual(date(2023, 7, 11), EthiopicDate(2015, 11, 4).to_gregorian())
+            self.assertEqual(date(2023, 3, 12), EthiopicDate(2015, 7, 3).to_gregorian())
+            self.assertEqual(date(2018, 7, 19), EthiopicDate(2010, 11, 12).to_gregorian())
+            self.assertEqual(date(2017, 2, 16), EthiopicDate(2009, 6, 9).to_gregorian())
+            self.assertEqual(date(2002, 5, 22), EthiopicDate(1994, 9, 14).to_gregorian())
+            self.assertEqual(date(1998, 9, 14), EthiopicDate(1991, 1, 4).to_gregorian())
+
+            # Test new years (leap year)
+            self.assertEqual(date(2019, 9, 10), EthiopicDate(2011, 13, 5).to_gregorian())
+            self.assertEqual(date(2019, 9, 11), EthiopicDate(2011, 13, 6).to_gregorian())
+            self.assertEqual(date(2019, 9, 12), EthiopicDate(2012, 1, 1).to_gregorian())
+
+            # Test new years (non leap years)
+            self.assertEqual(date(2020, 9, 10), EthiopicDate(2012, 13, 5).to_gregorian())
+            self.assertEqual(date(2020, 9, 11), EthiopicDate(2013, 1, 1).to_gregorian())
+            self.assertEqual(date(2020, 9, 12), EthiopicDate(2013, 1, 2).to_gregorian())
+
+            # Test a random date in the year following a leap year
+            self.assertEqual(date(2019, 11, 3), EthiopicDate(2012, 2, 23).to_gregorian())
+
+            # Test 1/1/1
+            self.assertEqual(date(8, 8, 27), EthiopicDate(1, 1, 1).to_gregorian())
