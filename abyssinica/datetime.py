@@ -37,10 +37,9 @@ class Date:
 
     def toordinal(self) -> int:
         full_leap_year_cycle_count, remainder_years = divmod(self.year, 4)
-        a = (full_leap_year_cycle_count * self._LEAP_YEAR_CYCLE_DAYS) + (remainder_years * 365)
-        b = (self.month - 1) * 30
-        c = self.day
-        return a + b + c
+        num_days_before_year = (full_leap_year_cycle_count * self._LEAP_YEAR_CYCLE_DAYS) + (remainder_years * 365)
+        num_days_before_month = (self.month - 1) * 30
+        return num_days_before_year + num_days_before_month + self.day
 
     def to_gregorian(self) -> date:
         gregorian_day_number = self.toordinal() + Date._GREGORIAN_OFFSET_DAYS
