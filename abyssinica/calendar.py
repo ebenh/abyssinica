@@ -115,4 +115,6 @@ class Date:
 
 
 if __name__ == '__main__':
-    pass
+    import locale
+    locale.setlocale(locale.LC_TIME, 'rus_rus')
+    print(datetime.now().strftime('%m/%d/%Y'))
