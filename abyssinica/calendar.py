@@ -49,8 +49,8 @@ class Date:
         gregorian_day_number = self.toordinal() + Date._GREGORIAN_OFFSET_DAYS
         return date.fromordinal(gregorian_day_number)
 
-    @staticmethod
-    def from_gregorian(gregorian_date: date) -> 'Date':
+    @classmethod
+    def from_gregorian(cls, gregorian_date: date) -> 'Date':
         assert gregorian_date >= date(8, 8, 27), 'Dates before 1 AD of the Ethiopic calendar are not supported'
 
         ethiopic_day_number = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
@@ -64,7 +64,7 @@ class Date:
         month = Date._get_month(day_of_year)
         day = Date._get_day_of_month(day_of_year)
 
-        return Date(year, month, day)
+        return cls(year, month, day)
 
     @staticmethod
     def _get_leap_year_cycles(ethiopic_day_number: int):
