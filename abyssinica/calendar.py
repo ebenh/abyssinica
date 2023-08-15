@@ -40,7 +40,7 @@ class Date:
         return (year + 1) % 4 == 0
 
     def toordinal(self) -> int:
-        full_leap_year_cycle_count, remainder_years = divmod(self.year, 4)
+        full_leap_year_cycle_count, remainder_years = divmod(self.year - 1, 4)
         num_days_before_year = (full_leap_year_cycle_count * self._LEAP_YEAR_CYCLE_DAYS) + (remainder_years * 365)
         num_days_before_month = (self.month - 1) * 30
         return num_days_before_year + num_days_before_month + self.day
