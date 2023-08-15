@@ -153,25 +153,30 @@ class TestDate(unittest.TestCase):
             self.assertEqual(date(8, 8, 27), EthiopicDate(1, 1, 1).to_gregorian())
 
     def test_weekday(self):
-        from abyssinica.calendar import Date
+        from abyssinica.calendar import Date as EthiopicDate
+        from datetime import datetime
 
         # First Wednesday
-        self.assertEqual(Date(1, 1, 1).weekday(), 2)
+        self.assertEqual(2, EthiopicDate(1, 1, 1).weekday())
 
         # First Thursday
-        self.assertEqual(Date(1, 1, 2).weekday(), 3)
+        self.assertEqual(3, EthiopicDate(1, 1, 2).weekday())
 
         # First Friday
-        self.assertEqual(Date(1, 1, 3).weekday(), 4)
+        self.assertEqual(4, EthiopicDate(1, 1, 3).weekday())
 
         # First Saturday
-        self.assertEqual(Date(1, 1, 4).weekday(), 5)
+        self.assertEqual(5, EthiopicDate(1, 1, 4).weekday())
 
         # First Sunday
-        self.assertEqual(Date(1, 1, 5).weekday(), 6)
+        self.assertEqual(6, EthiopicDate(1, 1, 5).weekday())
 
         # First Monday
-        self.assertEqual(Date(1, 1, 6).weekday(), 0)
+        self.assertEqual(0, EthiopicDate(1, 1, 6).weekday())
 
         # First Tuesday
-        self.assertEqual(Date(1, 1, 7).weekday(), 1)
+        self.assertEqual(1, EthiopicDate(1, 1, 7).weekday())
+
+        # Make sure the Ethiopic and Gregorian calendars have the same day of the week
+        today_gregorian = datetime.now().date()
+        self.assertEqual(EthiopicDate.from_gregorian(today_gregorian).weekday(), today_gregorian.weekday())
