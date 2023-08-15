@@ -151,3 +151,27 @@ class TestDate(unittest.TestCase):
 
             # Test 1/1/1
             self.assertEqual(date(8, 8, 27), EthiopicDate(1, 1, 1).to_gregorian())
+
+    def test_weekday(self):
+        from abyssinica.calendar import Date
+
+        # First Wednesday
+        self.assertEqual(Date(1, 1, 1).weekday(), 2)
+
+        # First Thursday
+        self.assertEqual(Date(1, 1, 2).weekday(), 3)
+
+        # First Friday
+        self.assertEqual(Date(1, 1, 3).weekday(), 4)
+
+        # First Saturday
+        self.assertEqual(Date(1, 1, 4).weekday(), 5)
+
+        # First Sunday
+        self.assertEqual(Date(1, 1, 5).weekday(), 6)
+
+        # First Monday
+        self.assertEqual(Date(1, 1, 6).weekday(), 0)
+
+        # First Tuesday
+        self.assertEqual(Date(1, 1, 7).weekday(), 1)
