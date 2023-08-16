@@ -1,6 +1,5 @@
 import math
-from datetime import date, datetime
-from typing import Tuple
+from datetime import date
 
 
 class Date:
@@ -31,29 +30,20 @@ class Date:
         self.day = day
 
     @classmethod
-    def fromtimestamp(cls, t) -> 'Date':
-        return cls.from_gregorian(date.fromtimestamp(t))
-
-    @classmethod
     def today(cls) -> 'Date':
         return cls.from_gregorian(date.today())
+
+    @classmethod
+    def fromtimestamp(cls, t) -> 'Date':
+        return cls.from_gregorian(date.fromtimestamp(t))
 
     @classmethod
     def fromordinal(cls, ethiopic_day_number) -> 'Date':
         """
         :param ethiopic_day_number: The cumulative count of days since 1/1/-1.
-        :return: A `Date` object corresponding to the Ethoipic day number
+        :return: A `Date` object corresponding to the Ethiopic day number
         """
         return Date.from_gregorian(date.fromordinal(ethiopic_day_number + Date._GREGORIAN_OFFSET_DAYS))
-
-    def weekday(self) -> int:
-        # Return day of the week, where Monday == 0 ... Sunday == 6
-        return self.toordinal() % 7
-
-    @staticmethod
-    def is_leap_year(year: int) -> bool:
-        assert year >= 1, 'Dates before 1/1/1 are not supported'
-        return (year + 1) % 4 == 0
 
     def toordinal(self) -> int:
         """
@@ -64,26 +54,12 @@ class Date:
         num_days_before_month = (self.month - 1) * 30
         return num_days_before_year + num_days_before_month + self.day
 
-    def to_gregorian(self) -> date:
-        gregorian_day_number = self.toordinal() + Date._GREGORIAN_OFFSET_DAYS
-        return date.fromordinal(gregorian_day_number)
-
     @classmethod
     def from_gregorian(cls, gregorian_date: date) -> 'Date':
         assert gregorian_date >= date(8, 8, 27), 'Dates before 1/1/1 are not supported'
 
         ethiopic_day_number = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
 
-        year, month, day = Date._ethiopic_day_number_to_ymd(ethiopic_day_number)
-
-        return cls(year, month, day)
-
-    @staticmethod
-    def _ethiopic_day_number_to_ymd(ethiopic_day_number: int) -> Tuple[int, int, int]:
-        """
-        :param ethiopic_day_number: The cumulative count of days since 1/1/-1.
-        :return: A three-tuple consisting of the year, month and day corresponding to the Ethiopic day number
-        """
         full_leap_year_cycle_count, remainder_days = Date._get_leap_year_cycles(ethiopic_day_number)
 
         year = Date._get_year(full_leap_year_cycle_count, remainder_days)
@@ -93,7 +69,11 @@ class Date:
         month = Date._get_month(day_of_year)
         day = Date._get_day_of_month(day_of_year)
 
-        return year, month, day
+        return cls(year, month, day)
+
+    def to_gregorian(self) -> date:
+        gregorian_day_number = self.toordinal() + Date._GREGORIAN_OFFSET_DAYS
+        return date.fromordinal(gregorian_day_number)
 
     @staticmethod
     def _get_leap_year_cycles(ethiopic_day_number: int):
@@ -139,6 +119,15 @@ class Date:
         """
         return ((idx - 1) % k) + 1
 
+    def weekday(self) -> int:
+        # Return day of the week, where Monday == 0 ... Sunday == 6
+        return self.toordinal() % 7
+
+    @staticmethod
+    def is_leap_year(year: int) -> bool:
+        assert year >= 1, 'Dates before 1/1/1 are not supported'
+        return (year + 1) % 4 == 0
+
     def __str__(self) -> str:
         return f'{self.month}/{self.day}/{self.year}'
 
@@ -174,9 +163,7 @@ class Date:
 
 
 if __name__ == '__main__':
-    print(datetime.now().date().weekday())
-    print(Date.from_gregorian(datetime.now().date()).weekday())
-    print(Date(1,1,1).weekday())
+    pass
     # import locale
     # locale.setlocale(locale.LC_TIME, 'am_ET.UTF-8')
     # print(datetime.now().strftime('%B %a %A %U/%d/%Y'))
