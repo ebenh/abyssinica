@@ -120,7 +120,9 @@ class Date:
         return ((idx - 1) % k) + 1
 
     def weekday(self) -> int:
-        # Return day of the week, where Monday == 0 ... Sunday == 6
+        """
+        :return: Return day of the week, where Monday == 0 ... Sunday == 6
+        """
         return self.toordinal() % 7
 
     @staticmethod
