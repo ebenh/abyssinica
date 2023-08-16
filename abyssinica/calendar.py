@@ -1,5 +1,6 @@
 import math
 from datetime import date, datetime
+from typing import Tuple
 
 
 class Date:
@@ -11,12 +12,11 @@ class Date:
 
     _GREGORIAN_OFFSET_DAYS = 2430
     """
-    The difference in days between first day of the first month of the year 1 AD of the Gregorian calendar, and the 
-    first day of the first month of the year 1 BC of the Ethiopic calendar.
+    The difference in days between 1/1/-1 (Ethiopic) and 1/1/1 (Gregorian).
     """
 
     def __init__(self, year: int, month: int, day: int):
-        assert year >= 1, 'Dates before 1 AD of the Ethiopic calendar are not supported'
+        assert year >= 1, 'Dates before 1/1/1 are not supported'
         assert 1 <= month <= 13
 
         if month <= 12:
@@ -30,17 +30,36 @@ class Date:
         self.month = month
         self.day = day
 
-    def weekday(self):
+    @classmethod
+    def fromtimestamp(cls, t) -> 'Date':
+        return cls.from_gregorian(date.fromtimestamp(t))
+
+    @classmethod
+    def today(cls) -> 'Date':
+        return cls.from_gregorian(date.today())
+
+    @classmethod
+    def fromordinal(cls, ethiopic_day_number) -> 'Date':
+        """
+        :param ethiopic_day_number: The cumulative count of days since 1/1/-1.
+        :return: A `Date` object corresponding to the Ethoipic day number
+        """
+        return Date.from_gregorian(date.fromordinal(ethiopic_day_number + Date._GREGORIAN_OFFSET_DAYS))
+
+    def weekday(self) -> int:
         # Return day of the week, where Monday == 0 ... Sunday == 6
         return self.toordinal() % 7
 
     @staticmethod
     def is_leap_year(year: int) -> bool:
-        assert year >= 1, 'Dates before 1 AD of the Ethiopic calendar are not supported'
+        assert year >= 1, 'Dates before 1/1/1 are not supported'
         return (year + 1) % 4 == 0
 
     def toordinal(self) -> int:
-        full_leap_year_cycle_count, remainder_years = divmod(self.year - 1, 4)
+        """
+        :return: The cumulative count of days since 1/1/-1.
+        """
+        full_leap_year_cycle_count, remainder_years = divmod(self.year, 4)
         num_days_before_year = (full_leap_year_cycle_count * self._LEAP_YEAR_CYCLE_DAYS) + (remainder_years * 365)
         num_days_before_month = (self.month - 1) * 30
         return num_days_before_year + num_days_before_month + self.day
@@ -51,10 +70,20 @@ class Date:
 
     @classmethod
     def from_gregorian(cls, gregorian_date: date) -> 'Date':
-        assert gregorian_date >= date(8, 8, 27), 'Dates before 1 AD of the Ethiopic calendar are not supported'
+        assert gregorian_date >= date(8, 8, 27), 'Dates before 1/1/1 are not supported'
 
         ethiopic_day_number = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
 
+        year, month, day = Date._ethiopic_day_number_to_ymd(ethiopic_day_number)
+
+        return cls(year, month, day)
+
+    @staticmethod
+    def _ethiopic_day_number_to_ymd(ethiopic_day_number: int) -> Tuple[int, int, int]:
+        """
+        :param ethiopic_day_number: The cumulative count of days since 1/1/-1.
+        :return: A three-tuple consisting of the year, month and day corresponding to the Ethiopic day number
+        """
         full_leap_year_cycle_count, remainder_days = Date._get_leap_year_cycles(ethiopic_day_number)
 
         year = Date._get_year(full_leap_year_cycle_count, remainder_days)
@@ -64,18 +93,17 @@ class Date:
         month = Date._get_month(day_of_year)
         day = Date._get_day_of_month(day_of_year)
 
-        return cls(year, month, day)
+        return year, month, day
 
     @staticmethod
     def _get_leap_year_cycles(ethiopic_day_number: int):
         """
-        :param ethiopic_day_number: The cumulative count of days since the first day of the first month of the year 1 BC
-                                    of the Ethiopic calendar.
+        :param ethiopic_day_number: The cumulative count of days since 1/1/-1.
         :return: A two-tuple consisting of (1) An integer representing the count of full leap year cycles that have
                  occurred, and (2) An integer representing the remaining fraction of a leap year cycle expressed in
                  days.
         """
-        assert ethiopic_day_number > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
+        assert ethiopic_day_number > 365, 'Dates before 1/1/1 are not supported'
         return divmod(ethiopic_day_number, Date._LEAP_YEAR_CYCLE_DAYS)
 
     @staticmethod
@@ -83,7 +111,7 @@ class Date:
         assert full_leap_year_cycle_count >= 0
         assert 0 <= remainder_days < Date._LEAP_YEAR_CYCLE_DAYS
         if full_leap_year_cycle_count == 0:
-            assert remainder_days > 365, 'Dates before 1 AD of the Ethiopic calendar are not supported'
+            assert remainder_days > 365, 'Dates before 1/1/1 are not supported'
         return (full_leap_year_cycle_count * 4) + math.ceil(remainder_days / 365) - 1
 
     @staticmethod
