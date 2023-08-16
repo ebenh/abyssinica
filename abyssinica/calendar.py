@@ -139,11 +139,23 @@ class Date:
         """
         return ((idx - 1) % k) + 1
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.month}/{self.day}/{self.year}'
 
-    def __eq__(self, other: 'Date'):
-        return self.month == other.month and self.day == other.day and self.year == other.year
+    def __eq__(self, other: 'Date') -> bool:
+        return (self.year, self.month, self.day) == (other.year, other.month, other.day)
+
+    def __lt__(self, other: 'Date') -> bool:
+        return (self.year, self.month, self.day) < (other.year, other.month, other.day)
+
+    def __le__(self, other: 'Date') -> bool:
+        return (self.year, self.month, self.day) <= (other.year, other.month, other.day)
+
+    def __gt__(self, other: 'Date') -> bool:
+        return (self.year, self.month, self.day) > (other.year, other.month, other.day)
+
+    def __ge__(self, other: 'Date') -> bool:
+        return (self.year, self.month, self.day) >= (other.year, other.month, other.day)
 
 
 if __name__ == '__main__':
