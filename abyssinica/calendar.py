@@ -130,8 +130,19 @@ class Date:
         assert year >= 1, 'Dates before 1/1/1 are not supported'
         return (year + 1) % 4 == 0
 
+    def isoformat(self):
+        """Return the date formatted according to ISO.
+
+        This is 'YYYY-MM-DD'.
+
+        References:
+        - http://www.w3.org/TR/NOTE-datetime
+        - http://www.cl.cam.ac.uk/~mgk25/iso-time.html
+        """
+        return "%04d-%02d-%02d" % (self.year, self.month, self.day)
+
     def __str__(self) -> str:
-        return f'{self.month}/{self.day}/{self.year}'
+        return self.isoformat()
 
     def __eq__(self, other: 'Date') -> bool:
         if isinstance(other, Date):
