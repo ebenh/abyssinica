@@ -123,6 +123,9 @@ class TestDate(unittest.TestCase):
         # Test 1/1/1
         self.assertEqual(EthiopicDate(1, 1, 1), EthiopicDate.from_gregorian(date(8, 8, 27)))
 
+        # Test the Annunciation
+        self.assertEqual(EthiopicDate(1, 7, 29), EthiopicDate.from_gregorian(date(9, 3, 23)))
+
     def test_to_gregorian(self):
         from abyssinica.calendar import Date as EthiopicDate
         from datetime import date
@@ -151,6 +154,9 @@ class TestDate(unittest.TestCase):
 
         # Test 1/1/1
         self.assertEqual(date(8, 8, 27), EthiopicDate(1, 1, 1).to_gregorian())
+
+        # Test the Annunciation
+        self.assertEqual(date(9, 3, 23), EthiopicDate(1, 7, 29).to_gregorian())
 
     def test_weekday(self):
         from abyssinica.calendar import Date as EthiopicDate
