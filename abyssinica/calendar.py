@@ -174,6 +174,13 @@ class Date:
         else:
             return NotImplemented
 
+    def __repr__(self):
+        return "%s.%s(%d, %d, %d)" % (self.__class__.__module__,
+                                      self.__class__.__qualname__,
+                                      self.year,
+                                      self.month,
+                                      self.day)
+
 
 if __name__ == '__main__':
     pass
