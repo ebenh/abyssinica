@@ -120,11 +120,14 @@ class TestDate(unittest.TestCase):
         # Test a random date in the year following a leap year
         self.assertEqual(EthiopicDate(2012, 2, 23), EthiopicDate.from_gregorian(date(2019, 11, 3)))
 
-        # Test 1/1/1
+        # Test the Beginning of the Incarnation Era (i.e. 1/1/1 AD)
         self.assertEqual(EthiopicDate(1, 1, 1), EthiopicDate.from_gregorian(date(8, 8, 27)))
 
         # Test the Annunciation
         self.assertEqual(EthiopicDate(1, 7, 29), EthiopicDate.from_gregorian(date(9, 3, 23)))
+
+        # Test the Nativity (i.e. the first Christmas)
+        self.assertEqual(EthiopicDate(2, 4, 29), EthiopicDate.from_gregorian(date(9, 12, 23)))
 
     def test_to_gregorian(self):
         from abyssinica.calendar import Date as EthiopicDate
@@ -152,11 +155,14 @@ class TestDate(unittest.TestCase):
         # Test a random date in the year following a leap year
         self.assertEqual(date(2019, 11, 3), EthiopicDate(2012, 2, 23).to_gregorian())
 
-        # Test 1/1/1
+        # Test the Beginning of the Incarnation Era (i.e. 1/1/1 AD)
         self.assertEqual(date(8, 8, 27), EthiopicDate(1, 1, 1).to_gregorian())
 
         # Test the Annunciation
         self.assertEqual(date(9, 3, 23), EthiopicDate(1, 7, 29).to_gregorian())
+
+        # Test the Nativity (i.e. the first Christmas)
+        self.assertEqual(date(9, 12, 23), EthiopicDate(2, 4, 29).to_gregorian())
 
     def test_weekday(self):
         from abyssinica.calendar import Date as EthiopicDate
