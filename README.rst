@@ -22,6 +22,18 @@ Convert between Arabic and Ge'ez numerals::
     >>> geez_to_arabic('፵፪')
     42
 
+Calendar
+========
+Convert between Gregorian and Ethiopic dates::
+
+    >>> from abyssinica.calendar import Date as EthiopicDate
+    >>> from datetime import date as GregorianDate
+    >>> EthiopicDate.from_gregorian(GregorianDate(year=1996, month=3, day=2))
+    abyssinica.calendar.Date(1988, 6, 23)
+
+    >>> EthiopicDate(year=1988, month=6, day=23).to_gregorian()
+    datetime.date(1996, 3, 2)
+
 Romanization
 ============
 Transliterate Ge'ez characters::
@@ -29,11 +41,3 @@ Transliterate Ge'ez characters::
     >>> from abyssinica.romanization import romanize
     >>> print(f"{romanize('ሰላም እንደምን አለህ?').capitalize()}")
     Salām ʼendamn ʼalah?
-
-**********************
-Upcoming Functionality
-**********************
-
-Date & Time
-===========
-Convert between Ge'ez and Gregorian dates and times.
