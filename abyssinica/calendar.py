@@ -20,7 +20,8 @@ class Date:
 
         if month <= 12:
             assert 1 <= day <= 30
-        elif Date.is_leap_year(year):
+        elif Date.is_leap_year(year+1):
+            # Leap days are added in years preceding leap years
             assert 1 <= day <= 6
         else:
             assert 1 <= day <= 5
@@ -127,8 +128,14 @@ class Date:
 
     @staticmethod
     def is_leap_year(year: int) -> bool:
+        """
+        Years divisible by four are designated as leap years, keep in mind that leap days are added in the years
+        preceding leap years.
+        :param year: The Ethiopic year
+        :return: Whether the year is a leap year.
+        """
         assert year >= 1, 'Dates before 1/1/1 are not supported'
-        return (year + 1) % 4 == 0
+        return year % 4 == 0
 
     def isoformat(self):
         """Return the date formatted according to ISO.
