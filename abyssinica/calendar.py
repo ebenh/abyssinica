@@ -187,23 +187,3 @@ class Date:
                                       self.year,
                                       self.month,
                                       self.day)
-
-
-if __name__ == '__main__':
-    pass
-    # import locale
-    # locale.setlocale(locale.LC_TIME, 'am_ET.UTF-8')
-    # print(datetime.now().strftime('%B %a %A %U/%d/%Y'))
-    # import locale
-    # d = datetime.now().date()
-
-    # available_locales = []
-    # for l in locale.locale_alias.items():
-    #     try:
-    #         locale.setlocale(locale.LC_ALL, l[1])
-    #         available_locales.append(l)
-    #     except:
-    #         pass
-    #
-    #
-    # print(available_locales)
