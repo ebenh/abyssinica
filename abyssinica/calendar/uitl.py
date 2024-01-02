@@ -1,6 +1,6 @@
 """
-- The Julian epoch is November 24, 4713 BC (GC) and is assigned Julian day number 0
-- The year 1 is preceded by hte year 0 for mathematical convenience
+- The Julian epoch is January 1, 4713 BC (JC) or November 24, 4714 BC (GC) and is assigned Julian day number 0
+- The year 1 is preceded by the year 0 for mathematical convenience
 """
 from typing import Dict
 
