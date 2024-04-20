@@ -35,11 +35,11 @@ class Date:
         return cls.from_gregorian(date.today())
 
     @classmethod
-    def fromtimestamp(cls, t) -> 'Date':
+    def fromtimestamp(cls, t: int) -> 'Date':
         return cls.from_gregorian(date.fromtimestamp(t))
 
     @classmethod
-    def fromordinal(cls, ethiopic_day_number) -> 'Date':
+    def fromordinal(cls, ethiopic_day_number: int) -> 'Date':
         """
         :param ethiopic_day_number: The cumulative count of days since 1/1/-1.
         :return: A `Date` object corresponding to the Ethiopic day number
@@ -111,7 +111,7 @@ class Date:
         return Date._circular_index(day_of_year, 30)
 
     @staticmethod
-    def _circular_index(idx, k):
+    def _circular_index(idx: int, k: int):
         """
         Cycles the index `idx` within the range [1, k]
         :param idx: The index
