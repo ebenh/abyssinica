@@ -13,26 +13,34 @@ class TestDate(unittest.TestCase):
     def test_get_year(self):
         from abyssinica.calendar.date import Date
 
+        # Test 4721 BC
+        self.assertEqual(-4721, Date._get_year(0, TestDate._get_n_years(0) + 1))
+        self.assertEqual(-4721, Date._get_year(0, TestDate._get_n_years(0) + 365))
+
+        # Test 4720 BC
+        self.assertEqual(-4720, Date._get_year(0, TestDate._get_n_years(1) + 1))
+        self.assertEqual(-4720, Date._get_year(0, TestDate._get_n_years(1) + 365))
+
+        # Test 4719 BC
+        self.assertEqual(-4719, Date._get_year(0, TestDate._get_n_years(2) + 1))
+        self.assertEqual(-4719, Date._get_year(0, TestDate._get_n_years(2) + 365))
+
+        # Test 4718 BC (leap Year)
+        self.assertEqual(-4718, Date._get_year(0, TestDate._get_n_years(3) + 1))
+        self.assertEqual(-4718, Date._get_year(0, TestDate._get_n_years(3) + 365))
+        self.assertEqual(-4718, Date._get_year(1, TestDate._get_n_years(0)))
+
+        # Test 4717 BC
+        self.assertEqual(-4717, Date._get_year(1, TestDate._get_n_years(0) + 1))
+        self.assertEqual(-4717, Date._get_year(1, TestDate._get_n_years(0) + 365))
+
+        # Test 1 BC
+        self.assertEqual(-1, Date._get_year(1180, TestDate._get_n_years(0) + 1))
+        self.assertEqual(-1, Date._get_year(1180, TestDate._get_n_years(0) + 365))
+
         # Test 1 AD
-        self.assertEqual(1, Date._get_year(0, TestDate._get_n_years(1) + 1))
-        self.assertEqual(1, Date._get_year(0, TestDate._get_n_years(1) + 365))
-
-        # Test 2 AD
-        self.assertEqual(2, Date._get_year(0, TestDate._get_n_years(2) + 1))
-        self.assertEqual(2, Date._get_year(0, TestDate._get_n_years(2) + 365))
-
-        # Test 3 AD (leap year)
-        self.assertEqual(3, Date._get_year(0, TestDate._get_n_years(3) + 1))
-        self.assertEqual(3, Date._get_year(0, TestDate._get_n_years(3) + 365))
-        self.assertEqual(3, Date._get_year(1, TestDate._get_n_years(0)))
-
-        # Test 4 AD
-        self.assertEqual(4, Date._get_year(1, TestDate._get_n_years(0) + 1))
-        self.assertEqual(4, Date._get_year(1, TestDate._get_n_years(0) + 365))
-
-        # Test 5 AD
-        self.assertEqual(5, Date._get_year(1, TestDate._get_n_years(1) + 1))
-        self.assertEqual(5, Date._get_year(1, TestDate._get_n_years(1) + 365))
+        self.assertEqual(1, Date._get_year(1180, TestDate._get_n_years(1) + 1))
+        self.assertEqual(1, Date._get_year(1180, TestDate._get_n_years(1) + 365))
 
     def test_get_day_of_year(self):
         from abyssinica.calendar.date import Date
@@ -45,11 +53,11 @@ class TestDate(unittest.TestCase):
         self.assertEqual(1, Date._get_day_of_year(TestDate._get_n_years(1) + 1))
         self.assertEqual(365, Date._get_day_of_year(TestDate._get_n_years(1) + 365))
 
-        # Year 3 (leap year)
+        # Year 3
         self.assertEqual(1, Date._get_day_of_year(TestDate._get_n_years(2) + 1))
         self.assertEqual(365, Date._get_day_of_year(TestDate._get_n_years(2) + 365))
 
-        # Year 4
+        # Year 4 (leap year)
         self.assertEqual(1, Date._get_day_of_year(TestDate._get_n_years(3) + 1))
         self.assertEqual(365, Date._get_day_of_year(TestDate._get_n_years(3) + 365))
         self.assertEqual(366, Date._get_day_of_year(TestDate._get_n_years(0)))
@@ -167,6 +175,9 @@ class TestDate(unittest.TestCase):
     def test_weekday(self):
         from abyssinica.calendar.date import Date as EthiopicDate
         from datetime import datetime
+
+        # First Tuesday
+        self.assertEqual(1, EthiopicDate(-1, 13, 5).weekday())
 
         # First Wednesday
         self.assertEqual(2, EthiopicDate(1, 1, 1).weekday())

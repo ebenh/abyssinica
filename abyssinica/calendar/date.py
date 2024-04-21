@@ -1,5 +1,6 @@
 import math
 from datetime import date
+from abyssinica.calendar.uitl import to_julian_day
 
 
 class Date:
@@ -14,8 +15,13 @@ class Date:
     The difference in days between 1/1/-1 (Ethiopic) and 1/1/1 (Gregorian).
     """
 
+    _JULIAN_DAY_OFFSET = 124
+
+    _MIN_YEAR = -4721
+
     def __init__(self, year: int, month: int, day: int):
-        assert year >= 1, 'Dates before 1/1/1 are not supported'
+        assert year != 0, '0 is not a valid year'
+        assert year >= -4721, 'Dates before 01/01/4721 BC are not supported'
         assert 1 <= month <= 13
 
         if month <= 12:
@@ -39,29 +45,41 @@ class Date:
         return cls.from_gregorian(date.fromtimestamp(t))
 
     @classmethod
-    def fromordinal(cls, ethiopic_day_number: int) -> 'Date':
+    def fromordinal(cls, ethiopic_day: int) -> 'Date':
         """
-        :param ethiopic_day_number: The cumulative count of days since 1/1/-1.
+        :param ethiopic_day: The cumulative count of days since 1/1/-1.
         :return: A `Date` object corresponding to the Ethiopic day number
         """
-        return Date.from_gregorian(date.fromordinal(ethiopic_day_number + Date._GREGORIAN_OFFSET_DAYS))
+        return Date.from_gregorian(date.fromordinal(ethiopic_day + Date._GREGORIAN_OFFSET_DAYS))
 
     def toordinal(self) -> int:
         """
         :return: The cumulative count of days since 1/1/-1.
         """
+        assert self.year >= 1, 'This method is only supported for dates greater than or equal to 1/1/1'
         full_leap_year_cycle_count, remainder_years = divmod(self.year, 4)
         num_days_before_year = (full_leap_year_cycle_count * self._LEAP_YEAR_CYCLE_DAYS) + (remainder_years * 365)
         num_days_before_month = (self.month - 1) * 30
         return num_days_before_year + num_days_before_month + self.day
 
+    def to_julian_day(self) -> int:
+        year_count = abs(self._MIN_YEAR + 1) + self.year
+        full_leap_year_cycle_count, remainder_years = divmod(year_count, 4)
+        num_days_before_year = (full_leap_year_cycle_count * self._LEAP_YEAR_CYCLE_DAYS) + (remainder_years * 365)
+        num_days_before_month = (self.month - 1) * 30
+        ethiopic_day = num_days_before_year + num_days_before_month + self.day
+        julian_day = ethiopic_day - self._JULIAN_DAY_OFFSET - 1
+        return julian_day
+
     @classmethod
     def from_gregorian(cls, gregorian_date: date) -> 'Date':
-        assert gregorian_date >= date(8, 8, 27), 'Dates before 1/1/1 are not supported'
+        # ethiopic_day = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
 
-        ethiopic_day_number = gregorian_date.toordinal() - Date._GREGORIAN_OFFSET_DAYS
+        julian_day = to_julian_day(gregorian_date.year, gregorian_date.month, gregorian_date.day, 'GREGORIAN')
 
-        full_leap_year_cycle_count, remainder_days = Date._get_leap_year_cycles(ethiopic_day_number)
+        ethiopic_day = julian_day + Date._JULIAN_DAY_OFFSET + 1  # added 125
+
+        full_leap_year_cycle_count, remainder_days = Date._get_leap_year_cycles(ethiopic_day)
 
         year = Date._get_year(full_leap_year_cycle_count, remainder_days)
 
@@ -73,27 +91,30 @@ class Date:
         return cls(year, month, day)
 
     def to_gregorian(self) -> date:
-        gregorian_day_number = self.toordinal() + Date._GREGORIAN_OFFSET_DAYS
-        return date.fromordinal(gregorian_day_number)
+        gregorian_day = self.toordinal() + Date._GREGORIAN_OFFSET_DAYS
+        return date.fromordinal(gregorian_day)
 
     @staticmethod
-    def _get_leap_year_cycles(ethiopic_day_number: int):
+    def _get_leap_year_cycles(ethiopic_day: int):
         """
-        :param ethiopic_day_number: The cumulative count of days since 1/1/-1.
+        :param ethiopic_day: The cumulative count of days since 1/1/-1.
         :return: A two-tuple consisting of (1) An integer representing the count of full leap year cycles that have
                  occurred, and (2) An integer representing the remaining fraction of a leap year cycle expressed in
                  days.
         """
-        assert ethiopic_day_number > 365, 'Dates before 1/1/1 are not supported'
-        return divmod(ethiopic_day_number, Date._LEAP_YEAR_CYCLE_DAYS)
+        # assert ethiopic_day > 365, 'Dates before 1/1/1 are not supported'
+        return divmod(ethiopic_day, Date._LEAP_YEAR_CYCLE_DAYS)
 
     @staticmethod
     def _get_year(full_leap_year_cycle_count: int, remainder_days: int) -> int:
         assert full_leap_year_cycle_count >= 0
         assert 0 <= remainder_days < Date._LEAP_YEAR_CYCLE_DAYS
         if full_leap_year_cycle_count == 0:
-            assert remainder_days > 365, 'Dates before 1/1/1 are not supported'
-        return (full_leap_year_cycle_count * 4) + math.ceil(remainder_days / 365) - 1
+            assert remainder_days > 0, 'Invalid arguments'
+        year_count = (full_leap_year_cycle_count * 4) + math.ceil(remainder_days / 365)
+        year = Date._MIN_YEAR + year_count
+        year = year - 1 if year <= 0 else year  # Make the year look right 0 -> 1 BC, 1 -> 2 BC
+        return year
 
     @staticmethod
     def _get_day_of_year(remainder_days: int) -> int:
@@ -134,7 +155,8 @@ class Date:
         :param year: The Ethiopic year
         :return: Whether the year is a leap year.
         """
-        assert year >= 1, 'Dates before 1/1/1 are not supported'
+        assert year != 0, '0 is not a valid year'
+        assert year >= -4721, 'Dates before 01/01/4721 BC are not supported'
         return year % 4 == 0
 
     def isoformat(self):
