@@ -204,6 +204,37 @@ class TestDate(unittest.TestCase):
         # The Nativity, the first Christmas
         self.assertEqual(date(9, 12, 23), EthiopicDate(2, 4, 29).to_gregorian())
 
+    def test_to_gregorian_outside_datetime_range(self):
+        # datetime.date supports dates 01/01/0001 to 12/31/9999 (Gregorian).
+        # That range corresponds to 05/08/-0007 to 02/21/9992 (Ethiopic).
+        #
+        # Our date class supports dates 01/01/-4720 (Ethiopic) onwards with
+        # no upper bound, so it is wider at both ends.
+        #
+        # Therefore a date before 05/08/-0007 (Ethiopic), or after
+        # 02/21/9992 (Ethiopic), is valid here but has no datetime.date to
+        # convert to. to_gregorian should raise for those rather than return
+        # a wrong date.
+        earliest = EthiopicDate.from_gregorian(date.min)
+        latest = EthiopicDate.from_gregorian(date.max)
+
+        # The edges themselves should still convert
+        self.assertEqual(date.min, earliest.to_gregorian())
+        self.assertEqual(date.max, latest.to_gregorian())
+
+        # Step a day past each edge through JDN, which has no such bounds
+        day_before = EthiopicDate.from_jdn(earliest.to_jdn() - 1)
+        day_after = EthiopicDate.from_jdn(latest.to_jdn() + 1)
+
+        # Each should raise, and say which date failed
+        with self.assertRaises(ValueError) as caught:
+            day_before.to_gregorian()
+        self.assertIn(str(day_before), str(caught.exception))
+
+        with self.assertRaises(ValueError) as caught:
+            day_after.to_gregorian()
+        self.assertIn(str(day_after), str(caught.exception))
+
     def test_weekday(self):
         # Eight consecutive days across the start of year 1, which begins
         # on a Wednesday. The first is the last day of year 0, so it covers
@@ -234,6 +265,14 @@ class TestDate(unittest.TestCase):
     def test_isoformat(self):
         self.assertEqual('2017-01-01', EthiopicDate(2017, 1, 1).isoformat())
         self.assertEqual('0001-01-01', EthiopicDate(1, 1, 1).isoformat())
+
+        # The year should keep four digits below year 1, with the minus sign
+        # in front of them rather than counting as one of them
+        self.assertEqual('0000-01-01', EthiopicDate(0, 1, 1).isoformat())
+        self.assertEqual('-0001-01-01', EthiopicDate(-1, 1, 1).isoformat())
+        self.assertEqual('-0099-01-01', EthiopicDate(-99, 1, 1).isoformat())
+        self.assertEqual('-0999-01-01', EthiopicDate(-999, 1, 1).isoformat())
+        self.assertEqual('-4720-01-01', EthiopicDate(-4720, 1, 1).isoformat())
 
     def test_str(self):
         self.assertEqual('2017-01-01', str(EthiopicDate(2017, 1, 1)))

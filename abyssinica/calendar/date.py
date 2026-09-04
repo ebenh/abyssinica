@@ -17,10 +17,10 @@ class Date:
     01/01/-4712 (Julian). Months are numbered rather than named, since
     the three calendars here name them differently.
 
-    A Julian Day Number (JDN) is a continuous count of days, starting
-    from zero, since the beginning of the Julian period: 01/01/-4712
-    (Julian). It provides a single integer for any calendar date, making
-    it a convenient intermediary for converting between calendar systems.
+    A Julian Day Number (JDN) is a continuous count of days, starting from
+    zero, since the beginning of the Julian period: 01/01/-4712 (Julian).
+    It provides a single integer for any calendar date, making it a
+    convenient intermediary for converting between calendar systems.
 
     The algorithm converts between an "Ethiopian Day Number" (EDN) and a
     "Gregorian Day Number" (GDN), using JDN as the intermediary. Each
@@ -178,13 +178,16 @@ class Date:
     def isoformat(self):
         """Return the date formatted according to ISO.
 
-        This is 'YYYY-MM-DD'.
+        This is 'YYYY-MM-DD', and '-YYYY-MM-DD' for years before 1, whose
+        minus sign precedes the four digits rather than counting as one
+        of them.
 
         References:
         - http://www.w3.org/TR/NOTE-datetime
         - http://www.cl.cam.ac.uk/~mgk25/iso-time.html
         """
-        return "%04d-%02d-%02d" % (self.year, self.month, self.day)
+        sign = '-' if self.year < 0 else ''
+        return "%s%04d-%02d-%02d" % (sign, abs(self.year), self.month, self.day)
 
     def __str__(self) -> str:
         return self.isoformat()
