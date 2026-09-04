@@ -32,7 +32,7 @@ class Date:
 
     """
 
-    _JDN_OFFSET = 124
+    _EDN_OFFSET = 124
     """
     The offset between Julian Day Numbers and Ethiopian Day Numbers.
     JDN 0 falls on January 1, 4713 BC (Julian). The Ethiopian cycle starts
@@ -109,7 +109,7 @@ class Date:
         """
         Create a Date from a Julian Day Number.
         """
-        edn = jdn + cls._JDN_OFFSET
+        edn = jdn + cls._EDN_OFFSET
         assert edn >= 0, 'Julian Day Number is before the earliest supported date'
 
         full_cycles, remainder_days = divmod(edn, cls._LEAP_YEAR_CYCLE_DAYS)
@@ -133,7 +133,7 @@ class Date:
         full_cycles, cycle_year = divmod(year_number, 4)
         day_of_year = (self.month - 1) * 30 + (self.day - 1)
         edn = full_cycles * self._LEAP_YEAR_CYCLE_DAYS + cycle_year * 365 + day_of_year
-        return edn - self._JDN_OFFSET
+        return edn - self._EDN_OFFSET
 
     @classmethod
     def from_gregorian(cls, gregorian_date: date) -> 'Date':
