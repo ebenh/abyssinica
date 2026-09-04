@@ -1,7 +1,7 @@
 import unittest
 from datetime import date, datetime
 
-from abyssinica.calendar.date2 import Date as EthiopicDate
+from abyssinica.calendar.date import Date as EthiopicDate
 
 
 class TestDate(unittest.TestCase):
