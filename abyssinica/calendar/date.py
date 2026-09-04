@@ -6,16 +6,18 @@ class Date:
     Ethiopian calendar date using a simplified algorithm based on
     Julian Day Numbers.
 
+    **All years here are astronomical**, where 1 AD corresponds to 1,
+    1 BC corresponds to 0, 2 BC corresponds to -1, and so on. This avoids
+    the discontinuity of historical year numbering, which has no year
+    zero, and simplifies arithmetic. Years BC carry a minus sign rather
+    than an era; drop the sign and add one to convert, so -4712 is
+    4713 BC.
+
     A Julian Day Number (JDN) is a continuous count of days, starting
     from zero, since the beginning of the Julian period: January 1,
-    4713 BC (Julian). It provides a single integer for any calendar
-    date, making it a convenient intermediary for converting between
-    calendar systems.
-
-    This implementation uses astronomical year numbering, where 1 AD
-    corresponds to 1, 1 BC corresponds to 0, 2 BC corresponds to -1,
-    and so on. This avoids the discontinuity of historical year
-    numbering (which has no year zero) and simplifies arithmetic.
+    -4712 (Julian). It provides a single integer for any calendar date,
+    making it a convenient intermediary for converting between calendar
+    systems.
 
     The algorithm converts between an "Ethiopian Day Number" (EDN) and a
     "Gregorian Day Number" (GDN), using JDN as the intermediary.
@@ -32,7 +34,7 @@ class Date:
         EDN:    0                          EDN: 124
            |------------- 124 days -------------|
            |                                    |
-    Aug 30, 4714 BC (Julian)        Jan 1, 4713 BC (Julian)
+    Aug 30, -4713 (Julian)          Jan 1, -4712 (Julian)
     Meskerem 1, -4720 (Ethiopic)    Tir 5, -4720 (Ethiopic)
     """
 
@@ -57,16 +59,16 @@ class Date:
     """
     The offset between Julian Day Numbers and Gregorian Day Numbers.
 
-    We chose GDN 0 to be January 1, 1 AD (Gregorian) because it is the epoch
+    We chose GDN 0 to be January 1, 1 (Gregorian) because it is the epoch
     of the proleptic Gregorian calendar. Proleptic means the calendar is
-    extended backwards before its creation in 1582 AD.
+    extended backwards before its creation in 1582.
 
         JDN:           0                 JDN: 1,721,426
         GDN:  -1,721,426                 GDN:         0
                    |------- 1,721,426 days -------|
                    |                              |
-        Jan 1, 4713 BC (Julian)         Jan 3, 1 AD (Julian)
-        Nov 24, 4714 BC (Gregorian)     Jan 1, 1 AD (Gregorian)
+        Jan 1, -4712 (Julian)           Jan 3, 1 (Julian)
+        Nov 24, -4713 (Gregorian)       Jan 1, 1 (Gregorian)
 
     Python's `date` class counts the same days from one rather than zero,
     the established convention known as Rata Die, so a GDN is Python's
@@ -141,8 +143,8 @@ class Date:
         Convert this date to a `datetime.date`.
 
         Raises `ValueError` for dates outside the range `datetime.date` can
-        represent, which is January 1, 1 AD (Gregorian) through
-        December 31, 9999 AD (Gregorian).
+        represent, which is January 1, 1 (Gregorian) through
+        December 31, 9999 (Gregorian).
         """
         gdn = self.to_jdn() - self._GDN_OFFSET
         ordinal = gdn + 1
