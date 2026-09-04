@@ -13,11 +13,14 @@ class Date:
     than an era; drop the sign and add one to convert, so -4712 is
     4713 BC.
 
+    **Dates are written mm/dd/yyyy**, with the calendar in parentheses:
+    01/01/-4712 (Julian). Months are numbered rather than named, since
+    the three calendars here name them differently.
+
     A Julian Day Number (JDN) is a continuous count of days, starting
-    from zero, since the beginning of the Julian period: January 1,
-    -4712 (Julian). It provides a single integer for any calendar date,
-    making it a convenient intermediary for converting between calendar
-    systems.
+    from zero, since the beginning of the Julian period: 01/01/-4712
+    (Julian). It provides a single integer for any calendar date, making
+    it a convenient intermediary for converting between calendar systems.
 
     The algorithm converts between an "Ethiopian Day Number" (EDN) and a
     "Gregorian Day Number" (GDN), using JDN as the intermediary. Each
@@ -28,15 +31,15 @@ class Date:
     """
     The offset between Julian Day Numbers and Ethiopian Day Numbers.
 
-    We chose EDN 0 to be Meskerem 1, -4720 (Ethiopic) because it is the
-    4-year leap cycle boundary in the Ethiopian calendar closest to JDN 0.
+    We chose EDN 0 to be 01/01/-4720 (Ethiopic) because it is the 4-year
+    leap cycle boundary in the Ethiopian calendar closest to JDN 0.
 
         JDN: -124                          JDN:   0
         EDN:    0                          EDN: 124
            |------------- 124 days -------------|
            |                                    |
-    Aug 30, -4713 (Julian)          Jan 1, -4712 (Julian)
-    Meskerem 1, -4720 (Ethiopic)    Tir 5, -4720 (Ethiopic)
+    08/30/-4713 (Julian)               01/01/-4712 (Julian)
+    01/01/-4720 (Ethiopic)             05/05/-4720 (Ethiopic)
     """
 
     _LEAP_YEAR_CYCLE_DAYS = 1_461
@@ -57,7 +60,7 @@ class Date:
     """
     The offset between Julian Day Numbers and Gregorian Day Numbers.
 
-    We chose GDN 0 to be January 1, 1 (Gregorian) because it is the epoch
+    We chose GDN 0 to be 01/01/0001 (Gregorian) because it is the epoch
     of the proleptic Gregorian calendar. Proleptic means the calendar is
     extended backwards before its creation in 1582.
 
@@ -65,8 +68,8 @@ class Date:
         GDN:  -1,721,426                 GDN:         0
                    |------- 1,721,426 days -------|
                    |                              |
-        Jan 1, -4712 (Julian)           Jan 3, 1 (Julian)
-        Nov 24, -4713 (Gregorian)       Jan 1, 1 (Gregorian)
+        01/01/-4712 (Julian)            01/03/0001 (Julian)
+        11/24/-4713 (Gregorian)         01/01/0001 (Gregorian)
 
     Python's `date` class counts the same days from one rather than zero,
     the established convention known as Rata Die, so a GDN is Python's
@@ -141,8 +144,8 @@ class Date:
         Convert this date to a `datetime.date`.
 
         Raises `ValueError` for dates outside the range `datetime.date` can
-        represent, which is January 1, 1 (Gregorian) through
-        December 31, 9999 (Gregorian).
+        represent, which is 01/01/0001 (Gregorian) through 12/31/9999
+        (Gregorian).
         """
         gdn = self.to_jdn() - self._GDN_OFFSET
         ordinal = gdn + 1
