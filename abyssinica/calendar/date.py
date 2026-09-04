@@ -8,9 +8,9 @@ class Date:
 
     A Julian Day Number (JDN) is a continuous count of days, starting
     from zero, since the beginning of the Julian period: January 1,
-    4713 BC (Julian calendar). It provides a single integer for any
-    calendar date, making it a convenient intermediary for converting
-    between calendar systems.
+    4713 BC (Julian). It provides a single integer for any calendar
+    date, making it a convenient intermediary for converting between
+    calendar systems.
 
     This implementation uses astronomical year numbering, where 1 AD
     corresponds to 1, 1 BC corresponds to 0, 2 BC corresponds to -1,
@@ -19,7 +19,7 @@ class Date:
 
     The algorithm works by converting between JDN and an "Ethiopian
     Day Number" (EDN), where we chose EDN 0 to be Meskerem 1,
-    -4720 EC, the 4-year leap cycle boundary in the Ethiopian
+    -4720 (Ethiopic), the 4-year leap cycle boundary in the Ethiopian
     calendar closest to JDN 0. The offset between JDN and EDN is
     124 days.
 
@@ -28,15 +28,16 @@ class Date:
            |----------- 124 days -----------|
            |                                |
        EDN epoch                        JDN epoch
-    (Aug 30, 4714 BC Julian)     (Jan 1, 4713 BC Julian)
+    Aug 30, 4714 BC (Julian)     Jan 1, 4713 BC (Julian)
 
     """
 
     _JDN_OFFSET = 124
     """
     The offset between Julian Day Numbers and Ethiopian Day Numbers.
-    124 days separate JDN 0 (Jan 1, 4713 BC Julian) from the Ethiopian cycle
-    start (Aug 30, 4714 BC Julian = Meskerem 1, -4720 EC).
+    JDN 0 falls on January 1, 4713 BC (Julian). The Ethiopian cycle starts
+    124 days earlier, on August 30, 4714 BC (Julian), which is the same day
+    as Meskerem 1, -4720 (Ethiopic) in astronomical numbering.
     """
 
     _LEAP_YEAR_CYCLE_DAYS = 1_461
@@ -47,7 +48,8 @@ class Date:
     _YEAR_OFFSET = 4_720
     """
     The offset to convert from a zero-based year count to an Ethiopian year
-    in astronomical numbering. Year 0 in the count corresponds to Ethiopian year -4720.
+    in astronomical numbering. Year 0 in the count corresponds to Ethiopian
+    year -4720.
     """
 
     _MIN_YEAR = -4_720
@@ -57,29 +59,31 @@ class Date:
 
     _GREGORIAN_EPOCH_JDN = 1_721_426
     """
-    The Julian Day Number of January 1, 1 A.D., the day Python numbers as
-    ordinal 1.
+    The Julian Day Number of January 1, 1 AD (Gregorian), which is GDN 1.
+    The calendar matters here: the same Julian Day Number is
+    January 3, 1 AD (Julian).
     """
 
-    _ORDINAL_OFFSET = _GREGORIAN_EPOCH_JDN - 1
+    _GDN_OFFSET = _GREGORIAN_EPOCH_JDN - 1
     """
-    The offset between Julian Day Numbers and Python's proleptic Gregorian
-    ordinals, which count days from 1 at January 1, 1 A.D. Proleptic means the
-    calendar is extended backwards before its creation in 1582 A.D.
+    The offset between Julian Day Numbers and Gregorian Day Numbers, which
+    count days from 1 at January 1, 1 AD (Gregorian) in the proleptic
+    Gregorian calendar. Proleptic means the calendar is extended backwards
+    before its creation in 1582 AD.
 
-    Ordinals are one based rather than zero based, so the epoch's own Julian
+    GDNs are one based rather than zero based, so the epoch's own Julian
     Day Number is one too many to convert with. The offset is instead the
-    Julian Day Number of ordinal day zero, the day before the epoch:
+    Julian Day Number of GDN zero, the day before the epoch:
 
-        ordinal:           0           1           2
+        GDN:               0           1           2
         JDN:       1,721,425   1,721,426   1,721,427
                            |           |
-                           |           +-- January 1, 1 A.D., the epoch,
+                           |           +-- Jan 1, 1 AD (Gregorian), the epoch,
                            |               returned by date.fromordinal(1)
-                           +-- December 31, year 0, which datetime
+                           +-- Dec 31, 0 (Gregorian), which datetime
                                cannot represent
 
-        JDN = ordinal + 1,721,425
+        JDN = GDN + 1,721,425
 
     Python's `date` class already knows the Gregorian leap year rules, so this
     single constant is all that is needed to hand a JDN over to the standard
@@ -145,20 +149,21 @@ class Date:
         """
         Create a Date from a `datetime.date`.
         """
-        return cls.from_jdn(gregorian_date.toordinal() + cls._ORDINAL_OFFSET)
+        return cls.from_jdn(gregorian_date.toordinal() + cls._GDN_OFFSET)
 
     def to_gregorian(self) -> date:
         """
         Convert this date to a `datetime.date`.
 
         Raises `ValueError` for dates outside the range `datetime.date` can
-        represent, which is January 1, 1 A.D. through December 31, 9999 A.D.
+        represent, which is January 1, 1 AD (Gregorian) through
+        December 31, 9999 AD (Gregorian).
         """
-        ordinal = self.to_jdn() - self._ORDINAL_OFFSET
-        if not date.min.toordinal() <= ordinal <= date.max.toordinal():
-            raise ValueError(f'{self} E.C. is outside the range of datetime.date '
+        gdn = self.to_jdn() - self._GDN_OFFSET
+        if not date.min.toordinal() <= gdn <= date.max.toordinal():
+            raise ValueError(f'{self} (Ethiopic) is outside the range of datetime.date '
                              f'({date.min.isoformat()} to {date.max.isoformat()})')
-        return date.fromordinal(ordinal)
+        return date.fromordinal(gdn)
 
     @staticmethod
     def is_leap_year(year: int) -> bool:
