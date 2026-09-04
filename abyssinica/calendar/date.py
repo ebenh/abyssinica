@@ -42,12 +42,15 @@ class Date:
     01/01/-4720 (Ethiopic)             05/05/-4720 (Ethiopic)
     """
 
-    _LEAP_YEAR_CYCLE_DAYS = 1_461
+    _ETHIOPIC_LEAP_CYCLE_DAYS = 1_461
     """
-    Days in a full 4-year leap cycle: 365 * 4 + 1 = 1,461.
+    Days in one Ethiopian leap cycle: 365 * 4 + 1 = 1,461.
+
+    The Ethiopian calendar adds a leap day every fourth year without
+    exception, so every cycle is exactly this long.
     """
 
-    _EDN_EPOCH_YEAR = -4_720
+    _ETHIOPIC_YEAR_AT_EDN_0 = -4_720
     """
     The Ethiopian year that starts on EDN 0. Our algorithm counts years
     from 0, then adds this constant to turn that count into a real year.
@@ -78,7 +81,8 @@ class Date:
     """
 
     def __init__(self, year: int, month: int, day: int):
-        assert year >= self._EDN_EPOCH_YEAR, f'Dates before year {self._EDN_EPOCH_YEAR} are not supported'
+        assert year >= self._ETHIOPIC_YEAR_AT_EDN_0, \
+            f'Dates before year {self._ETHIOPIC_YEAR_AT_EDN_0} are not supported'
         assert 1 <= month <= 13
 
         if month <= 12:
@@ -108,11 +112,11 @@ class Date:
         edn = jdn + cls._EDN_OFFSET
         assert edn >= 0, 'Julian Day Number is before the earliest supported date'
 
-        full_cycles, remainder_days = divmod(edn, cls._LEAP_YEAR_CYCLE_DAYS)
+        full_cycles, remainder_days = divmod(edn, cls._ETHIOPIC_LEAP_CYCLE_DAYS)
 
         year_in_cycle = min(remainder_days // 365, 3)
         year_number = full_cycles * 4 + year_in_cycle
-        year = year_number + cls._EDN_EPOCH_YEAR
+        year = year_number + cls._ETHIOPIC_YEAR_AT_EDN_0
 
         day_of_year = remainder_days - year_in_cycle * 365
 
@@ -125,10 +129,10 @@ class Date:
         """
         Convert this date to a Julian Day Number.
         """
-        year_number = self.year - self._EDN_EPOCH_YEAR
+        year_number = self.year - self._ETHIOPIC_YEAR_AT_EDN_0
         full_cycles, cycle_year = divmod(year_number, 4)
         day_of_year = (self.month - 1) * 30 + (self.day - 1)
-        edn = full_cycles * self._LEAP_YEAR_CYCLE_DAYS + cycle_year * 365 + day_of_year
+        edn = full_cycles * self._ETHIOPIC_LEAP_CYCLE_DAYS + cycle_year * 365 + day_of_year
         return edn - self._EDN_OFFSET
 
     @classmethod
