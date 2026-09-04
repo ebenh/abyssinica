@@ -258,18 +258,19 @@ class TestDate(unittest.TestCase):
         greg_today = datetime.now().date()
         self.assertEqual(eth_today, EthiopicDate.from_gregorian(greg_today))
 
-    def test_matches_v1_for_ce_dates(self):
-        """Verify date2 produces identical results to date.py for all CE dates in a range."""
-        from abyssinica.calendar.date import Date as DateV1
+    def test_matches_reference_over_modern_range(self):
+        # Every day from 01/01/1900 to 12/31/2025 (Gregorian), checked
+        # against the util module rather than against a sibling
+        from abyssinica.calendar.uitl import to_calendar
         from datetime import timedelta
 
         d = date(1900, 1, 1)
         end = date(2025, 12, 31)
         while d <= end:
-            v1 = DateV1.from_gregorian(d)
-            v2 = EthiopicDate.from_gregorian(d)
+            expected = to_calendar(d.toordinal() + 1_721_425, 'ETHIOPIC')
+            actual = EthiopicDate.from_gregorian(d)
             self.assertEqual(
-                str(v1), str(v2),
-                f'Mismatch for Gregorian {d}: v1={v1}, v2={v2}'
+                expected, (actual.year, actual.month, actual.day),
+                f'Mismatch for Gregorian {d}'
             )
             d += timedelta(days=1)
