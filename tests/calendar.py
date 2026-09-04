@@ -7,7 +7,7 @@ from abyssinica.calendar.date import Date as EthiopicDate
 class TestDate(unittest.TestCase):
 
     def test_is_leap_year(self):
-        # Pagume 6 exists in years where year % 4 == 3
+        # A sixth day of month 13 exists in years where year % 4 == 3
         self.assertTrue(EthiopicDate.is_leap_year(3))
         self.assertTrue(EthiopicDate.is_leap_year(7))
         self.assertTrue(EthiopicDate.is_leap_year(11))
@@ -20,35 +20,36 @@ class TestDate(unittest.TestCase):
         self.assertFalse(EthiopicDate.is_leap_year(0))
 
     def test_constructor_validation(self):
-        # Valid dates
+        # There should be 30 days in months 1 to 12, and 5 in month 13,
+        # or 6 when the year is a leap year
         EthiopicDate(1, 1, 1)
         EthiopicDate(1, 12, 30)
         EthiopicDate(1, 13, 5)
-        EthiopicDate(3, 13, 6)  # Leap year, Pagume 6
+        EthiopicDate(3, 13, 6)  # leap day
 
-        # Invalid month
+        # There should be no month outside 1 to 13
         with self.assertRaises(AssertionError):
             EthiopicDate(1, 0, 1)
         with self.assertRaises(AssertionError):
             EthiopicDate(1, 14, 1)
 
-        # Invalid day for regular month
+        # There should be no day outside 1 to 30 in months 1 to 12
         with self.assertRaises(AssertionError):
             EthiopicDate(1, 1, 0)
         with self.assertRaises(AssertionError):
             EthiopicDate(1, 1, 31)
 
-        # Pagume 6 in a non-leap year
+        # There should be no sixth day of month 13 in a non-leap year
         with self.assertRaises(AssertionError):
             EthiopicDate(1, 13, 6)
 
-        # Pagume 7 even in a leap year
+        # There should be no seventh day of month 13, even in a leap year
         with self.assertRaises(AssertionError):
             EthiopicDate(3, 13, 7)
 
     def test_to_jdn_known_epoch(self):
-        # Meskerem 1, Year 1 EC = JDN 1724221
-        self.assertEqual(1724221, EthiopicDate(1, 1, 1).to_jdn())
+        # 01/01/0001 (Ethiopic) is JDN 1,724,221
+        self.assertEqual(1_724_221, EthiopicDate(1, 1, 1).to_jdn())
 
     def test_jdn_round_trip(self):
         test_dates = [
@@ -57,9 +58,9 @@ class TestDate(unittest.TestCase):
             (0, 1, 1),
             (1, 1, 1),
             (3, 13, 5),
-            (3, 13, 6),   # Leap day
+            (3, 13, 6),   # leap day
             (4, 1, 1),
-            (7, 13, 6),   # Another leap day
+            (7, 13, 6),   # another leap day
             (2016, 1, 1),
             (2017, 6, 15),
         ]
@@ -94,11 +95,11 @@ class TestDate(unittest.TestCase):
         from abyssinica.calendar.uitl import to_calendar
 
         test_jdns = [
-            -124,        # Meskerem 1, -4720 EC
-            0,           # Julian epoch
-            1724221,     # Meskerem 1, Year 1 EC
-            1725316,     # Pagume 6, Year 3 EC
-            2460200,     # Meskerem 1, Year 2016 EC
+            -124,        # EDN 0, which is 01/01/-4720 (Ethiopic)
+            0,           # the Julian period epoch, 05/05/-4720 (Ethiopic)
+            1_724_221,   # 01/01/0001 (Ethiopic)
+            1_725_316,   # 13/06/0003 (Ethiopic), a leap day
+            2_460_200,   # 01/01/2016 (Ethiopic)
         ]
         for jdn in test_jdns:
             with self.subTest(jdn=jdn):
@@ -119,7 +120,7 @@ class TestDate(unittest.TestCase):
         first_day = EthiopicDate(4, 1, 1)
         self.assertEqual(last_day.to_jdn() + 1, first_day.to_jdn())
 
-        # BC year boundary (year -1 -> year 0)
+        # Negative leap year boundary (year -1 -> year 0)
         last_day = EthiopicDate(-1, 13, 6)  # -1 is a leap year (-1 % 4 == 3)
         first_day = EthiopicDate(0, 1, 1)
         self.assertEqual(last_day.to_jdn() + 1, first_day.to_jdn())
@@ -160,7 +161,7 @@ class TestDate(unittest.TestCase):
         # Test a random date in the year following a leap year
         self.assertEqual(EthiopicDate(2012, 2, 23), EthiopicDate.from_gregorian(date(2019, 11, 3)))
 
-        # Test the Beginning of the Incarnation Era (i.e. 1/1/1 AD)
+        # Test the beginning of the Incarnation Era, 01/01/0001 (Ethiopic)
         self.assertEqual(EthiopicDate(1, 1, 1), EthiopicDate.from_gregorian(date(8, 8, 27)))
 
         # Test the Annunciation
@@ -192,7 +193,7 @@ class TestDate(unittest.TestCase):
         # Test a random date in the year following a leap year
         self.assertEqual(date(2019, 11, 3), EthiopicDate(2012, 2, 23).to_gregorian())
 
-        # Test the Beginning of the Incarnation Era (i.e. 1/1/1 AD)
+        # Test the beginning of the Incarnation Era, 01/01/0001 (Ethiopic)
         self.assertEqual(date(8, 8, 27), EthiopicDate(1, 1, 1).to_gregorian())
 
         # Test the Annunciation
@@ -202,7 +203,7 @@ class TestDate(unittest.TestCase):
         self.assertEqual(date(9, 12, 23), EthiopicDate(2, 4, 29).to_gregorian())
 
     def test_weekday(self):
-        # Year 0 in date2 = year -1 (1 BC) in date.py
+        # Year 0 here is year -1 in date.py, which has no year zero
         # First Tuesday
         self.assertEqual(1, EthiopicDate(0, 13, 5).weekday())
 
