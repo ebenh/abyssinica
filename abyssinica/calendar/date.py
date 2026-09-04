@@ -87,6 +87,12 @@ class Date:
     """
 
     def __init__(self, year: int, month: int, day: int):
+        """
+        The year should be given as the astronomical year, where 1 AD
+        corresponds to 1, 1 BC corresponds to 0, 2 BC corresponds to -1,
+        and so on back to -4720, the earliest supported. It is stored
+        unchanged on the `year` attribute.
+        """
         assert year >= self._ETHIOPIC_YEAR_AT_EDN_0, \
             f'Dates before year {self._ETHIOPIC_YEAR_AT_EDN_0} are not supported'
         assert 1 <= month <= 13
