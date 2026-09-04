@@ -17,11 +17,16 @@ class Date:
     and so on. This avoids the discontinuity of historical year
     numbering (which has no year zero) and simplifies arithmetic.
 
-    The algorithm works by converting between JDN and an "Ethiopian
-    Day Number" (EDN), where we chose EDN 0 to be Meskerem 1,
-    -4720 (Ethiopic), the 4-year leap cycle boundary in the Ethiopian
-    calendar closest to JDN 0. The offset between JDN and EDN is
-    124 days.
+    The algorithm converts between an "Ethiopian Day Number" (EDN) and a
+    "Gregorian Day Number" (GDN), using JDN as the intermediary.
+    """
+
+    _EDN_OFFSET = 124
+    """
+    The offset between Julian Day Numbers and Ethiopian Day Numbers.
+
+    We chose EDN 0 to be Meskerem 1, -4720 (Ethiopic) because it is the
+    4-year leap cycle boundary in the Ethiopian calendar closest to JDN 0.
 
         JDN: -124                          JDN:   0
         EDN:    0                          EDN: 124
@@ -29,15 +34,6 @@ class Date:
            |                                    |
     Aug 30, 4714 BC (Julian)        Jan 1, 4713 BC (Julian)
     Meskerem 1, -4720 (Ethiopic)    Tir 5, -4720 (Ethiopic)
-
-    """
-
-    _EDN_OFFSET = 124
-    """
-    The offset between Julian Day Numbers and Ethiopian Day Numbers.
-    JDN 0 falls on January 1, 4713 BC (Julian). The Ethiopian cycle starts
-    124 days earlier, on August 30, 4714 BC (Julian), which is the same day
-    as Meskerem 1, -4720 (Ethiopic) in astronomical numbering.
     """
 
     _LEAP_YEAR_CYCLE_DAYS = 1_461
@@ -59,15 +55,11 @@ class Date:
 
     _GDN_OFFSET = 1_721_426
     """
-    The offset between Julian Day Numbers and a count of days from zero at
-    January 1, 1 AD (Gregorian) in the proleptic Gregorian calendar, which
-    we term Gregorian Day Numbers. Proleptic means the calendar is extended
-    backwards before its creation in 1582 AD.
+    The offset between Julian Day Numbers and Gregorian Day Numbers.
 
-    JDN and EDN each start at zero on their own epoch, and we choose to
-    number Gregorian days the same way. Python chooses to number those same
-    days from one, the established convention known as Rata Die; a GDN is
-    one less:
+    We chose GDN 0 to be January 1, 1 AD (Gregorian) because it is the epoch
+    of the proleptic Gregorian calendar. Proleptic means the calendar is
+    extended backwards before its creation in 1582 AD.
 
         JDN:           0                 JDN: 1,721,426
         GDN:  -1,721,426                 GDN:         0
@@ -76,9 +68,10 @@ class Date:
         Jan 1, 4713 BC (Julian)         Jan 3, 1 AD (Julian)
         Nov 24, 4714 BC (Gregorian)     Jan 1, 1 AD (Gregorian)
 
-    Python's `date` class already knows the Gregorian leap year rules, so this
-    single constant is all that is needed to hand a JDN over to the standard
-    library. No Gregorian date arithmetic is performed here.
+    Python's `date` class counts the same days from one rather than zero,
+    the established convention known as Rata Die, so a GDN is Python's
+    number less one. That count is the interchange `date` expects for
+    converting dates; it has no notion of Julian Day Numbers.
     """
 
     def __init__(self, year: int, month: int, day: int):
