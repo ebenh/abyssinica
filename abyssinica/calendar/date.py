@@ -157,10 +157,11 @@ class Date:
     @staticmethod
     def is_leap_year(year: int) -> bool:
         """
-        Whether the given year has Pagume 6 (366 days).
+        Whether the given year has 366 days: a sixth day in the
+        thirteenth month, Pagume, which otherwise has five.
 
-        In the Ethiopian calendar, the extra day falls in years where year % 4 == 3
-        (astronomical numbering). For example, years 3, 7, 11, ... and -1, -5, -9, ...
+        The extra day falls in years where year % 4 == 3, so years
+        3, 7, 11, ... and -1, -5, -9, ...
         """
         return year % 4 == 3
 
