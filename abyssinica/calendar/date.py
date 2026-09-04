@@ -41,6 +41,27 @@ class Date:
     01/01/-4720 (Ethiopic)             05/05/-4720 (Ethiopic)
     """
 
+    _GDN_OFFSET = 1_721_426
+    """
+    The offset between Julian Day Numbers and Gregorian Day Numbers.
+
+    We chose GDN 0 to be 01/01/0001 (Gregorian) because it is the epoch
+    of the proleptic Gregorian calendar. Proleptic means the calendar is
+    extended backwards before its creation in 1582.
+
+        JDN:           0                 JDN: 1,721,426
+        GDN:  -1,721,426                 GDN:         0
+                   |------- 1,721,426 days -------|
+                   |                              |
+        01/01/-4712 (Julian)            01/03/0001 (Julian)
+        11/24/-4713 (Gregorian)         01/01/0001 (Gregorian)
+
+    Python's `date` class counts the same days from one rather than zero,
+    the established convention known as Rata Die, so a GDN is Python's
+    number less one. That count is the interchange `date` expects for
+    converting dates; it has no notion of Julian Day Numbers.
+    """
+
     _ETHIOPIC_LEAP_CYCLE_DAYS = 1_461
     """
     Days in one Ethiopian leap cycle: 365 * 4 + 1 = 1,461.
@@ -62,27 +83,6 @@ class Date:
     """
     The number of years the Ethiopian church attests existed before the
     Incarnation (the conception of Christ).
-    """
-
-    _GDN_OFFSET = 1_721_426
-    """
-    The offset between Julian Day Numbers and Gregorian Day Numbers.
-
-    We chose GDN 0 to be 01/01/0001 (Gregorian) because it is the epoch
-    of the proleptic Gregorian calendar. Proleptic means the calendar is
-    extended backwards before its creation in 1582.
-
-        JDN:           0                 JDN: 1,721,426
-        GDN:  -1,721,426                 GDN:         0
-                   |------- 1,721,426 days -------|
-                   |                              |
-        01/01/-4712 (Julian)            01/03/0001 (Julian)
-        11/24/-4713 (Gregorian)         01/01/0001 (Gregorian)
-
-    Python's `date` class counts the same days from one rather than zero,
-    the established convention known as Rata Die, so a GDN is Python's
-    number less one. That count is the interchange `date` expects for
-    converting dates; it has no notion of Julian Day Numbers.
     """
 
     def __init__(self, year: int, month: int, day: int):
