@@ -20,7 +20,8 @@ class Date:
     systems.
 
     The algorithm converts between an "Ethiopian Day Number" (EDN) and a
-    "Gregorian Day Number" (GDN), using JDN as the intermediary.
+    "Gregorian Day Number" (GDN), using JDN as the intermediary. Each
+    count starts from zero on its own epoch: JDN 0, EDN 0, GDN 0.
     """
 
     _EDN_OFFSET = 124
@@ -43,16 +44,13 @@ class Date:
     Days in a full 4-year leap cycle: 365 * 4 + 1 = 1,461.
     """
 
-    _YEAR_OFFSET = 4_720
+    _EDN_EPOCH_YEAR = -4_720
     """
-    The offset to convert from a zero-based year count to an Ethiopian year
-    in astronomical numbering. Year 0 in the count corresponds to Ethiopian
-    year -4720.
-    """
+    The Ethiopian year that starts on EDN 0. Our algorithm counts years
+    from 0, then adds this constant to turn that count into a real year.
 
-    _MIN_YEAR = -4_720
-    """
-    The earliest supported Ethiopian year (astronomical numbering).
+    It is also the earliest year this class supports, since `from_jdn`
+    requires an EDN of at least zero and so the count never goes negative.
     """
 
     _GDN_OFFSET = 1_721_426
@@ -77,7 +75,7 @@ class Date:
     """
 
     def __init__(self, year: int, month: int, day: int):
-        assert year >= self._MIN_YEAR, f'Dates before year {self._MIN_YEAR} are not supported'
+        assert year >= self._EDN_EPOCH_YEAR, f'Dates before year {self._EDN_EPOCH_YEAR} are not supported'
         assert 1 <= month <= 13
 
         if month <= 12:
@@ -111,7 +109,7 @@ class Date:
 
         year_in_cycle = min(remainder_days // 365, 3)
         year_number = full_cycles * 4 + year_in_cycle
-        year = year_number - cls._YEAR_OFFSET
+        year = year_number + cls._EDN_EPOCH_YEAR
 
         day_of_year = remainder_days - year_in_cycle * 365
 
@@ -124,7 +122,7 @@ class Date:
         """
         Convert this date to a Julian Day Number.
         """
-        year_number = self.year + self._YEAR_OFFSET
+        year_number = self.year - self._EDN_EPOCH_YEAR
         full_cycles, cycle_year = divmod(year_number, 4)
         day_of_year = (self.month - 1) * 30 + (self.day - 1)
         edn = full_cycles * self._LEAP_YEAR_CYCLE_DAYS + cycle_year * 365 + day_of_year
