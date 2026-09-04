@@ -94,15 +94,23 @@ class Date:
         unchanged on the `year` attribute.
         """
         assert year >= self._ETHIOPIC_YEAR_AT_EDN_0, \
-            f'Dates before year {self._ETHIOPIC_YEAR_AT_EDN_0} are not supported'
-        assert 1 <= month <= 13
+            f'Year {year} is out of range, years range from ' \
+            f'{self._ETHIOPIC_YEAR_AT_EDN_0} onwards'
+        assert 1 <= month <= 13, \
+            f'Month {month} is out of range, months range from 1 to 13'
 
         if month <= 12:
-            assert 1 <= day <= 30
+            assert 1 <= day <= 30, \
+                f'Day {day} is out of range, days range from 1 to 30 ' \
+                f'in months 1 to 12'
         elif self.is_leap_year(year):
-            assert 1 <= day <= 6
+            assert 1 <= day <= 6, \
+                f'Day {day} is out of range, days range from 1 to 6 ' \
+                f'in month 13 of a leap year'
         else:
-            assert 1 <= day <= 5
+            assert 1 <= day <= 5, \
+                f'Day {day} is out of range, days range from 1 to 5 ' \
+                f'in month 13 of a non-leap year'
 
         self.year = year
         self.month = month
