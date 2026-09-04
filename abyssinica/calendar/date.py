@@ -39,23 +39,23 @@ class Date:
     start (Aug 30, 4714 BC Julian = Meskerem 1, -4720 EC).
     """
 
-    _LEAP_YEAR_CYCLE_DAYS = 1461
+    _LEAP_YEAR_CYCLE_DAYS = 1_461
     """
-    Days in a full 4-year leap cycle: 365 * 4 + 1 = 1461.
+    Days in a full 4-year leap cycle: 365 * 4 + 1 = 1,461.
     """
 
-    _YEAR_OFFSET = 4720
+    _YEAR_OFFSET = 4_720
     """
     The offset to convert from a zero-based year count to an Ethiopian year
     in astronomical numbering. Year 0 in the count corresponds to Ethiopian year -4720.
     """
 
-    _MIN_YEAR = -4720
+    _MIN_YEAR = -4_720
     """
     The earliest supported Ethiopian year (astronomical numbering).
     """
 
-    _GREGORIAN_EPOCH_JDN = 1721426
+    _GREGORIAN_EPOCH_JDN = 1_721_426
     """
     The Julian Day Number of January 1, 1 A.D., the day Python numbers as
     ordinal 1.
@@ -71,15 +71,15 @@ class Date:
     Day Number is one too many to convert with. The offset is instead the
     Julian Day Number of ordinal day zero, the day before the epoch:
 
-        ordinal:         0         1         2
-        JDN:       1721425   1721426   1721427
-                         |         |
-                         |         +-- January 1, 1 A.D., the epoch,
-                         |             returned by date.fromordinal(1)
-                         +-- December 31, year 0, which datetime
-                             cannot represent
+        ordinal:           0           1           2
+        JDN:       1,721,425   1,721,426   1,721,427
+                           |           |
+                           |           +-- January 1, 1 A.D., the epoch,
+                           |               returned by date.fromordinal(1)
+                           +-- December 31, year 0, which datetime
+                               cannot represent
 
-        JDN = ordinal + 1721425
+        JDN = ordinal + 1,721,425
 
     Python's `date` class already knows the Gregorian leap year rules, so this
     single constant is all that is needed to hand a JDN over to the standard
