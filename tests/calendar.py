@@ -72,7 +72,8 @@ class TestDate(unittest.TestCase):
                 self.assertEqual(m, result.month)
                 self.assertEqual(d, result.day)
 
-    def test_jdn_matches_cryptic_algorithm(self):
+    def test_to_jdn_matches_reference(self):
+        """The util module is a separate implementation, used here as an oracle."""
         from abyssinica.calendar.uitl import to_julian_day
 
         test_dates = [
@@ -91,7 +92,8 @@ class TestDate(unittest.TestCase):
                 actual = EthiopicDate(y, m, d).to_jdn()
                 self.assertEqual(expected, actual)
 
-    def test_from_jdn_matches_cryptic_algorithm(self):
+    def test_from_jdn_matches_reference(self):
+        """The util module is a separate implementation, used here as an oracle."""
         from abyssinica.calendar.uitl import to_calendar
 
         test_jdns = [
@@ -139,7 +141,7 @@ class TestDate(unittest.TestCase):
         )
 
     def test_from_gregorian(self):
-        # Test random dates
+        # Random dates
         self.assertEqual(EthiopicDate(2015, 12, 6), EthiopicDate.from_gregorian(date(2023, 8, 12)))
         self.assertEqual(EthiopicDate(2015, 11, 4), EthiopicDate.from_gregorian(date(2023, 7, 11)))
         self.assertEqual(EthiopicDate(2015, 7, 3), EthiopicDate.from_gregorian(date(2023, 3, 12)))
@@ -148,30 +150,30 @@ class TestDate(unittest.TestCase):
         self.assertEqual(EthiopicDate(1994, 9, 14), EthiopicDate.from_gregorian(date(2002, 5, 22)))
         self.assertEqual(EthiopicDate(1991, 1, 4), EthiopicDate.from_gregorian(date(1998, 9, 14)))
 
-        # Test new years (leap year)
+        # New year's day following a leap year, when month 13 has six days
         self.assertEqual(EthiopicDate(2011, 13, 5), EthiopicDate.from_gregorian(date(2019, 9, 10)))
         self.assertEqual(EthiopicDate(2011, 13, 6), EthiopicDate.from_gregorian(date(2019, 9, 11)))
         self.assertEqual(EthiopicDate(2012, 1, 1), EthiopicDate.from_gregorian(date(2019, 9, 12)))
 
-        # Test new years (non leap years)
+        # New year's day following a non-leap year, when month 13 has five days
         self.assertEqual(EthiopicDate(2012, 13, 5), EthiopicDate.from_gregorian(date(2020, 9, 10)))
         self.assertEqual(EthiopicDate(2013, 1, 1), EthiopicDate.from_gregorian(date(2020, 9, 11)))
         self.assertEqual(EthiopicDate(2013, 1, 2), EthiopicDate.from_gregorian(date(2020, 9, 12)))
 
-        # Test a random date in the year following a leap year
+        # A random date in the year following a leap year
         self.assertEqual(EthiopicDate(2012, 2, 23), EthiopicDate.from_gregorian(date(2019, 11, 3)))
 
-        # Test the beginning of the Incarnation Era, 01/01/0001 (Ethiopic)
+        # The beginning of the Incarnation Era, 01/01/0001 (Ethiopic)
         self.assertEqual(EthiopicDate(1, 1, 1), EthiopicDate.from_gregorian(date(8, 8, 27)))
 
-        # Test the Annunciation
+        # The Annunciation
         self.assertEqual(EthiopicDate(1, 7, 29), EthiopicDate.from_gregorian(date(9, 3, 23)))
 
-        # Test the Nativity (i.e. the first Christmas)
+        # The Nativity, the first Christmas
         self.assertEqual(EthiopicDate(2, 4, 29), EthiopicDate.from_gregorian(date(9, 12, 23)))
 
     def test_to_gregorian(self):
-        # Test random dates
+        # Random dates
         self.assertEqual(date(2023, 8, 12), EthiopicDate(2015, 12, 6).to_gregorian())
         self.assertEqual(date(2023, 7, 11), EthiopicDate(2015, 11, 4).to_gregorian())
         self.assertEqual(date(2023, 3, 12), EthiopicDate(2015, 7, 3).to_gregorian())
@@ -180,55 +182,42 @@ class TestDate(unittest.TestCase):
         self.assertEqual(date(2002, 5, 22), EthiopicDate(1994, 9, 14).to_gregorian())
         self.assertEqual(date(1998, 9, 14), EthiopicDate(1991, 1, 4).to_gregorian())
 
-        # Test new years (leap year)
+        # New year's day following a leap year, when month 13 has six days
         self.assertEqual(date(2019, 9, 10), EthiopicDate(2011, 13, 5).to_gregorian())
         self.assertEqual(date(2019, 9, 11), EthiopicDate(2011, 13, 6).to_gregorian())
         self.assertEqual(date(2019, 9, 12), EthiopicDate(2012, 1, 1).to_gregorian())
 
-        # Test new years (non leap years)
+        # New year's day following a non-leap year, when month 13 has five days
         self.assertEqual(date(2020, 9, 10), EthiopicDate(2012, 13, 5).to_gregorian())
         self.assertEqual(date(2020, 9, 11), EthiopicDate(2013, 1, 1).to_gregorian())
         self.assertEqual(date(2020, 9, 12), EthiopicDate(2013, 1, 2).to_gregorian())
 
-        # Test a random date in the year following a leap year
+        # A random date in the year following a leap year
         self.assertEqual(date(2019, 11, 3), EthiopicDate(2012, 2, 23).to_gregorian())
 
-        # Test the beginning of the Incarnation Era, 01/01/0001 (Ethiopic)
+        # The beginning of the Incarnation Era, 01/01/0001 (Ethiopic)
         self.assertEqual(date(8, 8, 27), EthiopicDate(1, 1, 1).to_gregorian())
 
-        # Test the Annunciation
+        # The Annunciation
         self.assertEqual(date(9, 3, 23), EthiopicDate(1, 7, 29).to_gregorian())
 
-        # Test the Nativity (i.e. the first Christmas)
+        # The Nativity, the first Christmas
         self.assertEqual(date(9, 12, 23), EthiopicDate(2, 4, 29).to_gregorian())
 
     def test_weekday(self):
-        # Year 0 here is year -1 in date.py, which has no year zero
-        # First Tuesday
-        self.assertEqual(1, EthiopicDate(0, 13, 5).weekday())
+        # Eight consecutive days across the start of year 1, which begins
+        # on a Wednesday. The first is the last day of year 0, so it covers
+        # every weekday once.
+        self.assertEqual(1, EthiopicDate(0, 13, 5).weekday())  # Tuesday
+        self.assertEqual(2, EthiopicDate(1, 1, 1).weekday())   # Wednesday
+        self.assertEqual(3, EthiopicDate(1, 1, 2).weekday())   # Thursday
+        self.assertEqual(4, EthiopicDate(1, 1, 3).weekday())   # Friday
+        self.assertEqual(5, EthiopicDate(1, 1, 4).weekday())   # Saturday
+        self.assertEqual(6, EthiopicDate(1, 1, 5).weekday())   # Sunday
+        self.assertEqual(0, EthiopicDate(1, 1, 6).weekday())   # Monday
+        self.assertEqual(1, EthiopicDate(1, 1, 7).weekday())   # Tuesday
 
-        # First Wednesday
-        self.assertEqual(2, EthiopicDate(1, 1, 1).weekday())
-
-        # First Thursday
-        self.assertEqual(3, EthiopicDate(1, 1, 2).weekday())
-
-        # First Friday
-        self.assertEqual(4, EthiopicDate(1, 1, 3).weekday())
-
-        # First Saturday
-        self.assertEqual(5, EthiopicDate(1, 1, 4).weekday())
-
-        # First Sunday
-        self.assertEqual(6, EthiopicDate(1, 1, 5).weekday())
-
-        # First Monday
-        self.assertEqual(0, EthiopicDate(1, 1, 6).weekday())
-
-        # First Tuesday
-        self.assertEqual(1, EthiopicDate(1, 1, 7).weekday())
-
-        # Make sure the Ethiopic and Gregorian calendars have the same day of the week
+        # The Ethiopic and Gregorian calendars should agree on the current day of the week
         today_gregorian = datetime.now().date()
         self.assertEqual(EthiopicDate.from_gregorian(today_gregorian).weekday(), today_gregorian.weekday())
 
