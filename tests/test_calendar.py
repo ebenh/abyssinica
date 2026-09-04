@@ -111,6 +111,25 @@ class TestDate(unittest.TestCase):
                 self.assertEqual(em, result.month)
                 self.assertEqual(ed, result.day)
 
+    def test_is_incarnation_era(self):
+        # The first day of the Incarnation era
+        self.assertTrue(EthiopicDate(1, 1, 1).is_incarnation_era)
+        # The day before the Incarnation era. Year 0 is not a leap year,
+        # so its month 13 ends on day 5
+        self.assertFalse(EthiopicDate(0, 13, 5).is_incarnation_era)
+
+    def test_creation_year(self):
+        # The first year of the Incarnation era (Creation year 5,501)
+        self.assertEqual(5_501, EthiopicDate(1, 1, 1).creation_year)
+        # The year before the Incarnation era (Creation year 5,500)
+        self.assertEqual(5_500, EthiopicDate(0, 1, 1).creation_year)
+        # The earliest year we support, -4720 (Creation year 780)
+        self.assertEqual(780, EthiopicDate(-4720, 1, 1).creation_year)
+        # 5,500 years before the Incarnation era (Creation year 1) is
+        # earlier still, so it cannot be reached
+        with self.assertRaises(AssertionError):
+            EthiopicDate(-5_499, 1, 1)
+
     def test_consecutive_days_at_year_boundary(self):
         # Non-leap year boundary (year 1 -> year 2)
         last_day = EthiopicDate(1, 13, 5)

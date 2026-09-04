@@ -59,6 +59,12 @@ class Date:
     requires an EDN of at least zero and so the count never goes negative.
     """
 
+    _ETHIOPIC_YEAR_COUNT_BEFORE_INCARNATION = 5_500
+    """
+    The number of years the Ethiopian church attests existed before the
+    Incarnation (the conception of Christ).
+    """
+
     _GDN_OFFSET = 1_721_426
     """
     The offset between Julian Day Numbers and Gregorian Day Numbers.
@@ -95,6 +101,31 @@ class Date:
         self.year = year
         self.month = month
         self.day = day
+
+    @property
+    def is_incarnation_era(self) -> bool:
+        """
+        Ethiopian years are reckoned from the year Christ was conceived,
+        an event called the Incarnation, which falls on 07/29/0001
+        (Ethiopic). Every year from 1 onwards is in the Incarnation Era.
+        """
+        return self.year >= 1
+
+    @property
+    def creation_year(self) -> int:
+        """
+        The Ethiopian calendar only counts years forwards, never backwards
+        as we do with years BC.
+
+        Years are reckoned from two dates, the Incarnation (the conception
+        of Christ) and the Creation (the creation of the world). Years
+        before the Incarnation can only be expressed by counting forwards
+        from the Creation, which starts at year 1.
+
+        The church places the Incarnation 5,500 years after the Creation,
+        so Ethiopian year 1 counts as 5,501.
+        """
+        return self._ETHIOPIC_YEAR_COUNT_BEFORE_INCARNATION + self.year
 
     @classmethod
     def today(cls) -> 'Date':
