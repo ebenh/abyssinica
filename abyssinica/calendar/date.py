@@ -6,12 +6,11 @@ class Date:
     Ethiopian calendar date using a simplified algorithm based on
     Julian Day Numbers.
 
-    **All years here are astronomical**, where 1 AD corresponds to 1,
-    1 BC corresponds to 0, 2 BC corresponds to -1, and so on. This avoids
-    the discontinuity of historical year numbering, which has no year
-    zero, and simplifies arithmetic. Years BC carry a minus sign rather
-    than an era; drop the sign and add one to convert, so -4712 is
-    4713 BC.
+    **All years here are astronomical**: they run continuously through
+    zero and into negative numbers, so the year before 1 is 0, the year
+    before that is -1, and so on. This avoids the discontinuity of
+    historical year numbering, which has no year zero, and simplifies
+    arithmetic.
 
     **Dates are written mm/dd/yyyy**, with the calendar in parentheses:
     01/01/-4712 (Julian). Months are numbered rather than named, since
@@ -88,10 +87,10 @@ class Date:
 
     def __init__(self, year: int, month: int, day: int):
         """
-        The year should be given as the astronomical year, where 1 AD
-        corresponds to 1, 1 BC corresponds to 0, 2 BC corresponds to -1,
-        and so on back to -4720, the earliest supported. It is stored
-        unchanged on the `year` attribute.
+        The year should be given as the astronomical year, where the
+        year before 1 is 0, the year before that is -1, and so on back
+        to -4720, the earliest supported. It is stored unchanged on the
+        `year` attribute.
         """
         assert year >= self._ETHIOPIC_YEAR_AT_EDN_0, \
             f'Year {year} is out of range, years range from ' \
