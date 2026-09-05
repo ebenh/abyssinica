@@ -211,18 +211,24 @@ class TestDate(unittest.TestCase):
         greg_today = datetime.now().date()
         self.assertEqual(eth_today, EthiopicDate.from_gregorian(greg_today))
 
+    # The tests below compare our conversions against the hpr module, a
+    # separate implementation of the same arithmetic. Its `to_julian_day`
+    # turns a date into a Julian day number and its `to_calendar` turns one
+    # back, for whichever calendar it is passed. Both work from a table of
+    # parameters rather than the longhand steps in date.py, so where the two
+    # agree it is unlikely that either has gone wrong.
     def test_to_jdn_matches_hpr(self):
         from abyssinica.calendar.hpr import to_julian_day
 
         test_dates = [
-            (-4720, 1, 1),
-            (-1, 1, 1),
-            (0, 1, 1),
-            (1, 1, 1),
-            (3, 13, 6),
-            (4, 1, 1),
-            (2016, 1, 1),
-            (2017, 13, 5),
+            (-4720, 1, 1),   # 01/01/-4720 (Ethiopic), the earliest date we support
+            (-1, 1, 1),      # 01/01/-0001 (Ethiopic), a leap year carrying a negative number
+            (0, 1, 1),       # 01/01/0000 (Ethiopic), year zero, which historical numbering has no room for
+            (1, 1, 1),       # 01/01/0001 (Ethiopic), the first day of the Incarnation era
+            (3, 13, 6),      # 13/06/0003 (Ethiopic), a leap day, the sixth day of month 13
+            (4, 1, 1),       # 01/01/0004 (Ethiopic), the day after a leap day
+            (2016, 1, 1),    # 01/01/2016 (Ethiopic), a new year's day in modern times
+            (2017, 13, 5),   # 13/05/2017 (Ethiopic), the last day of a year that is not a leap year
         ]
         for y, m, d in test_dates:
             with self.subTest(date=(y, m, d)):
@@ -234,11 +240,11 @@ class TestDate(unittest.TestCase):
         from abyssinica.calendar.hpr import to_calendar
 
         test_jdns = [
-            -124,        # EDN 0, which is 01/01/-4720 (Ethiopic)
-            0,           # the Julian period epoch, 05/05/-4720 (Ethiopic)
-            1_724_221,   # 01/01/0001 (Ethiopic)
-            1_725_316,   # 13/06/0003 (Ethiopic), a leap day
-            2_460_200,   # 01/01/2016 (Ethiopic)
+            -124,        # 01/01/-4720 (Ethiopic), EDN 0 and the earliest date we support
+            0,           # 05/05/-4720 (Ethiopic), the start of the Julian period
+            1_724_221,   # 01/01/0001 (Ethiopic), the first day of the Incarnation era
+            1_725_316,   # 13/06/0003 (Ethiopic), a leap day, the sixth day of month 13
+            2_460_200,   # 01/01/2016 (Ethiopic), a new year's day in modern times
         ]
         for jdn in test_jdns:
             with self.subTest(jdn=jdn):
