@@ -39,7 +39,7 @@ with parameters for algorithms". `to_julian_day` is its Algorithm 3 and
 `to_calendar` its Algorithm 4, both from section 15.11.3, "Interconverting
 Dates and Julian Day Numbers", on pages 618 and 619.
 """
-from typing import Dict
+from typing import Tuple
 
 _JULIAN_CONSTANTS = {
     'y': 4716,
@@ -119,7 +119,7 @@ def to_julian_day(Y: int, M: int, D: int, calendar_type: str) -> int:
 
 
 # noinspection PyPep8Naming
-def to_calendar(J: int, calendar_type: str) -> (int, int, int):
+def to_calendar(J: int, calendar_type: str) -> Tuple[int, int, int]:
     if calendar_type == 'JULIAN':
         c = _JULIAN_CONSTANTS
     elif calendar_type == 'GREGORIAN':
