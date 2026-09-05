@@ -211,8 +211,7 @@ class TestDate(unittest.TestCase):
         greg_today = datetime.now().date()
         self.assertEqual(eth_today, EthiopicDate.from_gregorian(greg_today))
 
-    def test_to_jdn_matches_reference(self):
-        """The util module is a separate implementation, used here as an oracle."""
+    def test_to_jdn_matches_hpr(self):
         from abyssinica.calendar.hpr import to_julian_day
 
         test_dates = [
@@ -231,8 +230,7 @@ class TestDate(unittest.TestCase):
                 actual = EthiopicDate(y, m, d).to_jdn()
                 self.assertEqual(expected, actual)
 
-    def test_from_jdn_matches_reference(self):
-        """The util module is a separate implementation, used here as an oracle."""
+    def test_from_jdn_matches_hpr(self):
         from abyssinica.calendar.hpr import to_calendar
 
         test_jdns = [
@@ -250,9 +248,8 @@ class TestDate(unittest.TestCase):
                 self.assertEqual(em, result.month)
                 self.assertEqual(ed, result.day)
 
-    def test_matches_reference_over_modern_range(self):
-        # Every day from 01/01/1900 to 12/31/2025 (Gregorian), checked
-        # against the util module rather than against a sibling
+    def test_matches_hpr_over_modern_range(self):
+        # Every day from 01/01/1900 to 12/31/2025 (Gregorian)
         from abyssinica.calendar.hpr import to_calendar
         from datetime import timedelta
 
