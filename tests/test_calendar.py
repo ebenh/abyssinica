@@ -180,7 +180,7 @@ class TestDate(unittest.TestCase):
         self.assertEqual(EthiopicDate(2017, 1, 1), EthiopicDate(2017, 1, 1))
         self.assertNotEqual(EthiopicDate(2017, 1, 1), EthiopicDate(2017, 1, 2))
 
-    def test_comparison(self):
+    def test_ordering(self):
         self.assertLess(EthiopicDate(2017, 1, 1), EthiopicDate(2017, 1, 2))
         self.assertLessEqual(EthiopicDate(2017, 1, 1), EthiopicDate(2017, 1, 1))
         self.assertGreater(EthiopicDate(2017, 1, 2), EthiopicDate(2017, 1, 1))
