@@ -121,7 +121,7 @@ class TestDate(unittest.TestCase):
         # The beginning of the Incarnation Era, 01/01/0001 (Ethiopic)
         self.assertEqual(EthiopicDate(1, 1, 1), EthiopicDate.from_gregorian(date(8, 8, 27)))
 
-        # The Annunciation
+        # The Incarnation
         self.assertEqual(EthiopicDate(1, 7, 29), EthiopicDate.from_gregorian(date(9, 3, 23)))
 
         # The Nativity, the first Christmas
@@ -153,7 +153,7 @@ class TestDate(unittest.TestCase):
         # The beginning of the Incarnation Era, 01/01/0001 (Ethiopic)
         self.assertEqual(date(8, 8, 27), EthiopicDate(1, 1, 1).to_gregorian())
 
-        # The Annunciation
+        # The Incarnation
         self.assertEqual(date(9, 3, 23), EthiopicDate(1, 7, 29).to_gregorian())
 
         # The Nativity, the first Christmas
