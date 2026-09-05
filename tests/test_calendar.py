@@ -213,7 +213,7 @@ class TestDate(unittest.TestCase):
 
     def test_to_jdn_matches_reference(self):
         """The util module is a separate implementation, used here as an oracle."""
-        from abyssinica.calendar.uitl import to_julian_day
+        from abyssinica.calendar.hpr import to_julian_day
 
         test_dates = [
             (-4720, 1, 1),
@@ -233,7 +233,7 @@ class TestDate(unittest.TestCase):
 
     def test_from_jdn_matches_reference(self):
         """The util module is a separate implementation, used here as an oracle."""
-        from abyssinica.calendar.uitl import to_calendar
+        from abyssinica.calendar.hpr import to_calendar
 
         test_jdns = [
             -124,        # EDN 0, which is 01/01/-4720 (Ethiopic)
@@ -253,7 +253,7 @@ class TestDate(unittest.TestCase):
     def test_matches_reference_over_modern_range(self):
         # Every day from 01/01/1900 to 12/31/2025 (Gregorian), checked
         # against the util module rather than against a sibling
-        from abyssinica.calendar.uitl import to_calendar
+        from abyssinica.calendar.hpr import to_calendar
         from datetime import timedelta
 
         d = date(1900, 1, 1)
