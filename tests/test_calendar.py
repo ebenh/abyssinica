@@ -47,45 +47,6 @@ class TestDate(unittest.TestCase):
         with self.assertRaises(AssertionError):
             EthiopicDate(3, 13, 7)
 
-    def test_to_jdn_matches_reference(self):
-        """The util module is a separate implementation, used here as an oracle."""
-        from abyssinica.calendar.uitl import to_julian_day
-
-        test_dates = [
-            (-4720, 1, 1),
-            (-1, 1, 1),
-            (0, 1, 1),
-            (1, 1, 1),
-            (3, 13, 6),
-            (4, 1, 1),
-            (2016, 1, 1),
-            (2017, 13, 5),
-        ]
-        for y, m, d in test_dates:
-            with self.subTest(date=(y, m, d)):
-                expected = to_julian_day(y, m, d, 'ETHIOPIC')
-                actual = EthiopicDate(y, m, d).to_jdn()
-                self.assertEqual(expected, actual)
-
-    def test_from_jdn_matches_reference(self):
-        """The util module is a separate implementation, used here as an oracle."""
-        from abyssinica.calendar.uitl import to_calendar
-
-        test_jdns = [
-            -124,        # EDN 0, which is 01/01/-4720 (Ethiopic)
-            0,           # the Julian period epoch, 05/05/-4720 (Ethiopic)
-            1_724_221,   # 01/01/0001 (Ethiopic)
-            1_725_316,   # 13/06/0003 (Ethiopic), a leap day
-            2_460_200,   # 01/01/2016 (Ethiopic)
-        ]
-        for jdn in test_jdns:
-            with self.subTest(jdn=jdn):
-                ey, em, ed = to_calendar(jdn, 'ETHIOPIC')
-                result = EthiopicDate.from_jdn(jdn)
-                self.assertEqual(ey, result.year)
-                self.assertEqual(em, result.month)
-                self.assertEqual(ed, result.day)
-
     def test_is_incarnation_era(self):
         # The first day of the Incarnation era
         self.assertTrue(EthiopicDate(1, 1, 1).is_incarnation_era)
@@ -249,6 +210,45 @@ class TestDate(unittest.TestCase):
         eth_today = EthiopicDate.today()
         greg_today = datetime.now().date()
         self.assertEqual(eth_today, EthiopicDate.from_gregorian(greg_today))
+
+    def test_to_jdn_matches_reference(self):
+        """The util module is a separate implementation, used here as an oracle."""
+        from abyssinica.calendar.uitl import to_julian_day
+
+        test_dates = [
+            (-4720, 1, 1),
+            (-1, 1, 1),
+            (0, 1, 1),
+            (1, 1, 1),
+            (3, 13, 6),
+            (4, 1, 1),
+            (2016, 1, 1),
+            (2017, 13, 5),
+        ]
+        for y, m, d in test_dates:
+            with self.subTest(date=(y, m, d)):
+                expected = to_julian_day(y, m, d, 'ETHIOPIC')
+                actual = EthiopicDate(y, m, d).to_jdn()
+                self.assertEqual(expected, actual)
+
+    def test_from_jdn_matches_reference(self):
+        """The util module is a separate implementation, used here as an oracle."""
+        from abyssinica.calendar.uitl import to_calendar
+
+        test_jdns = [
+            -124,        # EDN 0, which is 01/01/-4720 (Ethiopic)
+            0,           # the Julian period epoch, 05/05/-4720 (Ethiopic)
+            1_724_221,   # 01/01/0001 (Ethiopic)
+            1_725_316,   # 13/06/0003 (Ethiopic), a leap day
+            2_460_200,   # 01/01/2016 (Ethiopic)
+        ]
+        for jdn in test_jdns:
+            with self.subTest(jdn=jdn):
+                ey, em, ed = to_calendar(jdn, 'ETHIOPIC')
+                result = EthiopicDate.from_jdn(jdn)
+                self.assertEqual(ey, result.year)
+                self.assertEqual(em, result.month)
+                self.assertEqual(ed, result.day)
 
     def test_matches_reference_over_modern_range(self):
         # Every day from 01/01/1900 to 12/31/2025 (Gregorian), checked
