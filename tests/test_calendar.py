@@ -255,12 +255,12 @@ class TestDate(unittest.TestCase):
                 self.assertEqual(ed, result.day)
 
     def test_matches_hpr_over_modern_range(self):
-        # Every day from 01/01/1900 to 12/31/2025 (Gregorian)
+        # Every day from 01/01/1900 to 12/31/2100 (Gregorian)
         from abyssinica.calendar.hpr import to_calendar
         from datetime import timedelta
 
         d = date(1900, 1, 1)
-        end = date(2025, 12, 31)
+        end = date(2100, 12, 31)
         while d <= end:
             expected = to_calendar(d.toordinal() + 1_721_425, 'ETHIOPIC')
             actual = EthiopicDate.from_gregorian(d)
