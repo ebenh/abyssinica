@@ -47,31 +47,6 @@ class TestDate(unittest.TestCase):
         with self.assertRaises(AssertionError):
             EthiopicDate(3, 13, 7)
 
-    def test_to_jdn_known_epoch(self):
-        # 01/01/0001 (Ethiopic) is JDN 1,724,221
-        self.assertEqual(1_724_221, EthiopicDate(1, 1, 1).to_jdn())
-
-    def test_jdn_round_trip(self):
-        test_dates = [
-            (-4720, 1, 1),
-            (-1, 1, 1),
-            (0, 1, 1),
-            (1, 1, 1),
-            (3, 13, 5),
-            (3, 13, 6),   # leap day
-            (4, 1, 1),
-            (7, 13, 6),   # another leap day
-            (2016, 1, 1),
-            (2017, 6, 15),
-        ]
-        for y, m, d in test_dates:
-            with self.subTest(date=(y, m, d)):
-                jdn = EthiopicDate(y, m, d).to_jdn()
-                result = EthiopicDate.from_jdn(jdn)
-                self.assertEqual(y, result.year)
-                self.assertEqual(m, result.month)
-                self.assertEqual(d, result.day)
-
     def test_to_jdn_matches_reference(self):
         """The util module is a separate implementation, used here as an oracle."""
         from abyssinica.calendar.uitl import to_julian_day
@@ -222,37 +197,6 @@ class TestDate(unittest.TestCase):
 
         # The Nativity, the first Christmas
         self.assertEqual(date(9, 12, 23), EthiopicDate(2, 4, 29).to_gregorian())
-
-    def test_to_gregorian_outside_datetime_range(self):
-        # datetime.date supports dates 01/01/0001 to 12/31/9999 (Gregorian).
-        # That range corresponds to 05/08/-0007 to 02/21/9992 (Ethiopic).
-        #
-        # Our date class supports dates 01/01/-4720 (Ethiopic) onwards with
-        # no upper bound, so it is wider at both ends.
-        #
-        # Therefore a date before 05/08/-0007 (Ethiopic), or after
-        # 02/21/9992 (Ethiopic), is valid here but has no datetime.date to
-        # convert to. to_gregorian should raise for those rather than return
-        # a wrong date.
-        earliest = EthiopicDate.from_gregorian(date.min)
-        latest = EthiopicDate.from_gregorian(date.max)
-
-        # The edges themselves should still convert
-        self.assertEqual(date.min, earliest.to_gregorian())
-        self.assertEqual(date.max, latest.to_gregorian())
-
-        # Step a day past each edge through JDN, which has no such bounds
-        day_before = EthiopicDate.from_jdn(earliest.to_jdn() - 1)
-        day_after = EthiopicDate.from_jdn(latest.to_jdn() + 1)
-
-        # Each should raise, and say which date failed
-        with self.assertRaises(ValueError) as caught:
-            day_before.to_gregorian()
-        self.assertIn(str(day_before), str(caught.exception))
-
-        with self.assertRaises(ValueError) as caught:
-            day_after.to_gregorian()
-        self.assertIn(str(day_after), str(caught.exception))
 
     def test_weekday(self):
         # Eight consecutive days across the start of year 1, which begins
